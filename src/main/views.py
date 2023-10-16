@@ -1,10 +1,8 @@
 import io
 
 from django.http import JsonResponse, FileResponse
-from django.urls import reverse_lazy
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from django.views.generic.edit import FormView, FormMixin
+from django.views.generic.edit import FormView
 
 from . import services
 from .forms import PDFFileUploadForm
@@ -15,7 +13,7 @@ class IndexView(TemplateView):
 
 
 class ImageProcessingView(TemplateView):
-    template_name = 'processing_image.html'
+    template_name = 'image_processing.html'
 
 
 # class QrCodeGenerationView(FormView):
@@ -31,9 +29,9 @@ class ImageProcessingView(TemplateView):
 #         context['qrcode'] = kwargs.get('qrcode')
 #         return context
 
-class ProcessingPdfView(FormView):
+class PdfProcessingView(FormView):
     form_class = PDFFileUploadForm
-    template_name = 'processing_pdf/pdf_text_extract.html'
+    template_name = 'pdf_processing/pdf_text_extract.html'
 
     def form_invalid(self, form):
         return JsonResponse({'message': 'Некорректний pdf файл'})
@@ -45,5 +43,6 @@ class ProcessingPdfView(FormView):
             buffer.write(text.encode('utf-8'))
             buffer.seek(0)
             return FileResponse(buffer, as_attachment=True, filename='result.txt', content_type='text/plain')
-        except Exception:
+        except Exception as ex:
+            print(ex)
             return JsonResponse({'message': 'Некорректний pdf файл.'})
