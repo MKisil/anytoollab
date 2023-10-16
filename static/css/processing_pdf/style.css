@@ -1,0 +1,73 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pdf_tool {
+    padding: 120px 50px;
+    border: 2px solid #ddd3ed;
+    border-radius: 5px;
+}
+
+
+input[type=file] {
+    display: none;
+}
+
+label {
+    padding: 20px 30px;
+    border-radius: 6px;
+    background-color: #ffbd03;
+    margin-bottom: 20px;
+}
+
+label:hover {
+    background-color: #ffd84e;
+    cursor: pointer;
+}
+
+#file_form, .pdf_tool {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#submit_tool, #download_link {
+    font-family: inherit;
+    color: inherit;
+    font-size: 12px;
+    border: 2px solid #121816;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #7a7a76;
+    width: fit-content;
+}
+
+#submit_tool:hover, #download_link:hover {
+    cursor: pointer;
+}
+
+.loader {
+    display: none;
+    border: 10px solid #f3f3f3;
+    border-top: 10px solid #ffd84e;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.pdf_tool__msg-text {
+    width: fit-content;
+    color: #ff392e;
+    margin-bottom: 20px;
+}

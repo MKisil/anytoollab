@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <head>
+        <link rel="stylesheet" href="{% static 'css/processing_image/style.css' %}">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script>
+            jQuery.fn.outerHTML = function () {
+                return jQuery('<div />').append(this.eq(0).clone()).html();
+            };
+            Number.prototype.countDecimals = function () {
+                if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+                return this.toString().split(".")[1].length || 0;
+            }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.3/fabric.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+
+        <script src="{% static 'js/processing_image/grapick.min.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/processing_image/grapick.min.css' %}">
+
+        <script src="{% static 'js/processing_image/undo-redo-stack.js' %}"></script>
+
+        <script src="{% static 'js/processing_image/core.js' %}"></script>
+        <script src="{% static 'js/processing_image/toolbar.js' %}"></script>
+        <script src="{% static 'js/processing_image/canvas.js' %}"></script>
+        <script src="{% static 'js/processing_image/shapes.js' %}"></script>
+
+        <script src="{% static 'js/processing_image/freeDrawSettings.js' %}"></script>
+        <script src="{% static 'js/processing_image/canvasSettings.js' %}"></script>
+        <script src="{% static 'js/processing_image/selectionSettings.js' %}"></script>
+
+        <script src="{% static 'js/processing_image/drawingLine.js' %}"></script>
+        <script src="{% static 'js/processing_image/drawingPath.js' %}"></script>
+        <script src="{% static 'js/processing_image/drawingText.js' %}"></script>
+        <script src="{% static 'js/processing_image/tip.js' %}"></script>
+        <script src="{% static 'js/processing_image/upload.js' %}"></script>
+        <script src="{% static 'js/processing_image/copyPaste.js' %}"></script>
+
+        <script src="{% static 'js/processing_image/utils.js' %}"></script>
+        <script src="{% static 'js/processing_image/zoom.js' %}"></script>
+        <script src="{% static 'js/processing_image/saveInBrowser.js' %}"></script>
+
+    </head>
+{% endblock head %}
+{% block content %}
+    <div class="tool_wrapper">
+        <div id="image-editor-container"></div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/processing_image/script.js' %}"></script>
+{% endblock js %}
+
+

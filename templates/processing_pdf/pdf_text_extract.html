@@ -1,0 +1,32 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/processing_pdf/style.css' %}">
+{% endblock head %}
+{% block content %}
+    <section class="tool_detail">
+        <div class="container">
+            <h2 class="visually_hidden">Витягти текст із pdf</h2>
+            <div class="pdf_tool">
+                <div class="pdf_tool__msg">
+                    <p class="pdf_tool__msg-text"></p>
+                </div>
+                <form id="file_form" action="{% url 'pdf' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <label for="{{ field.id_for_label }}">
+                            <span class="label__text">Виберіть файл</span>
+                            {{ field }}
+                        </label>
+                    {% endfor %}
+                    <button type="submit" id="submit_tool">Витягти текст</button>
+                </form>
+                <div class="loader"></div>
+                <a href="#" id="download_link" style="display: none;" download="result.txt">Завантажити результат</a>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/convert_word2pdf/ajax_send_file.js' %}"></script>
+{% endblock js %}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Source+Code+Pro&family=Poppins&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% block head %}
+    {% endblock head %}
+    <title>Document</title>
+</head>
+<body>
+<header class="header">
+    <div class="header__container">
+        <nav class="nav">
+            <a class="logo" href="{% url 'home' %}">
+					<span class="logo__name">
+						pyMystery
+					</span>
+                <img src="{% static 'images/logo_icon.png' %}" alt="Логотип">
+            </a>
+            <ul class="nav__menu">
+                <li class="nav__menu-item"><a href="">Інструменти</a></li>
+                <li class="nav__menu-item"><a href="">Підтримка</a></li>
+                <li class="nav__menu-item"><a href="">Контакти</a></li>
+                <li class="nav__menu-item"><a href="#about">Про нас</a></li>
+            </ul>
+            <a href="#" class="login_logout-link">Увійти</a>
+        </nav>
+        {% block header %}
+        {% endblock header %}
+    </div>
+</header>
+<main class="main">
+    {% block content %}
+    {% endblock content %}
+</main>
+<footer class="footer">
+    <div class="footer__container">
+        <nav class="nav footer__nav">
+            <a class="logo" href="{% url 'home' %}">
+					<span class="logo__name">
+						pyMystery
+					</span>
+                <img src="{% static 'images/logo_icon.png' %}" alt="Логотип">
+            </a>
+            <ul class="nav__menu">
+                <li class="nav__menu-item"><a href="">Підтримка</a></li>
+                <li class="nav__menu-item"><a href="">Контакти</a></li>
+                <li class="nav__menu-item"><a href="">Ціни</a></li>
+            </ul>
+            <a href="#" class="language">
+                <img src="{% static 'images/language_icon.png' %}" alt="Іконка перекладу" class="language__img">
+            </a>
+        </nav>
+    </div>
+</footer>
+</body>
+{% block js %}
+{% endblock js %}
+</html>
