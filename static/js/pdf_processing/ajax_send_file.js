@@ -45,9 +45,16 @@ form.addEventListener('submit', function (e) {
 
 input_file.onchange = function () {
     if (input_file.files.length > 0) {
-        block_msg.textContent = '';
-        download_link.style.display = 'none';
-        label__text.textContent = 'Файл вибрано';
-        submit_tool.style.display = 'block';
+        if (input_file.files[0].size <= 10 * 1024 ** 2) {
+            block_msg.textContent = '';
+            download_link.style.display = 'none';
+            label__text.textContent = 'Файл вибрано';
+            submit_tool.style.display = 'block';
+        } else {
+            download_link.style.display = 'none';
+            submit_tool.style.display = 'none';
+            block_msg.textContent = 'Розмір файлу занадто великий.';
+            label__text.textContent = 'Виберіть файл'
+        }
     }
 }

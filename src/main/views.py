@@ -43,6 +43,5 @@ class PdfProcessingView(FormView):
             buffer.write(text.encode('utf-8'))
             buffer.seek(0)
             return FileResponse(buffer, as_attachment=True, filename='result.txt', content_type='text/plain')
-        except Exception as ex:
-            print(ex)
+        except Exception:
             return JsonResponse({'message': 'Некорректний pdf файл.'})
