@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'src.main.apps.MainConfig',
+    'src.pdf_processing.apps.PdfProcessingConfig',
+    'src.image_processing.apps.ImageProcessingConfig',
 ]
 
 MIDDLEWARE = [
