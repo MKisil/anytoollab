@@ -20,7 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('src.main.urls')),
-    path('pdf-processing/', include('src.pdf_processing.urls')),
-    path('image-processing/', include('src.image_processing.urls')),
+    path('pdf-processing/', include('src.pdf_processing.urls', namespace='pdf')),
+    path('image-processing/', include('src.image_processing.urls', namespace='image')),
     path('admin/', admin.site.urls),
 ]

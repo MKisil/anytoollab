@@ -11,7 +11,7 @@
                 <div class="pdf_tool__msg">
                     <p class="pdf_tool__msg-text"></p>
                 </div>
-                <form id="file_form" action="{% url 'text_extract' %}" method="post" enctype="multipart/form-data">
+                <form id="file_form" action="{% url 'pdf:text_extract' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% for field in form %}
                         <label for="{{ field.id_for_label }}">
