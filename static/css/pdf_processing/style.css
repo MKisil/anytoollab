@@ -4,41 +4,48 @@ main {
     align-items: center;
 }
 
+label {
+    font-size: 18px;
+    color: #333333;
+}
+
 .pdf_tool {
     padding: 120px 50px;
     border: 2px solid #ddd3ed;
     border-radius: 5px;
 }
 
-
 input[type=file] {
     display: none;
 }
 
-label {
+label[for=id_file] {
+    font-size: 20px;
+    color: white;
     padding: 20px 30px;
     border-radius: 6px;
     background-color: #ffbd03;
-    margin-bottom: 20px;
 }
 
-label:hover {
+label[for=id_file]:hover {
     background-color: #ffd84e;
     cursor: pointer;
 }
 
 #file_form, .pdf_tool {
     font-family: 'Source Code Pro', monospace;
-    font-size: 20px;
-    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+#file_form {
+    gap: 20px;
+}
+
 #submit_tool, #download_link {
     font-family: inherit;
-    color: inherit;
+    color: white;
     font-size: 12px;
     border: 2px solid #121816;
     padding: 12px;
@@ -59,6 +66,7 @@ label:hover {
     width: 30px;
     height: 30px;
     animation: spin 2s linear infinite;
+    margin-top: 25px;
 }
 
 @keyframes spin {

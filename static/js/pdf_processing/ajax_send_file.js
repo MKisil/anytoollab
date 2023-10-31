@@ -1,9 +1,7 @@
-const form = document.getElementById('file_form');
 const input_file = document.getElementById('id_file');
 const label__text = document.querySelector('.label__text');
 const download_link = document.getElementById('download_link');
 const block_msg = document.querySelector('.pdf_tool__msg-text');
-const submit_tool = document.getElementById('submit_tool');
 const loader = document.querySelector('.loader');
 
 function ajaxSend(url, data) {
@@ -13,17 +11,23 @@ function ajaxSend(url, data) {
     })
         .then(response => {
             const content_type = response.headers.get('Content-Type');
+            console.log(response.headers)
             if (content_type === 'application/json') {
                 return response.json();
             } else {
+                const content_disposition = response.headers.get('Content-Disposition');
+                const parts = content_disposition.split(';');
+                file_name = parts[1].split('=')[1].replace(/"/g, '');
                 return response.blob();
             }
         })
         .then(data => {
             loader.style.display = 'none';
-            label__text.textContent = 'Виберіть файл'
+            label__text.textContent = 'Вибрати інший файл';
+            input_file.disabled = false;
             if (data instanceof Blob) {
                 const url = URL.createObjectURL(data);
+                download_link.download = file_name;
                 download_link.href = url;
                 download_link.style.display = 'block';
             } else {
@@ -31,30 +35,4 @@ function ajaxSend(url, data) {
             }
         })
         .catch(error => console.error(error))
-}
-
-form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    submit_tool.style.display = 'none';
-    loader.style.display = 'block';
-
-    const formData = new FormData(this);
-
-    ajaxSend(form.getAttribute('action'), formData);
-});
-
-input_file.onchange = function () {
-    if (input_file.files.length > 0) {
-        if (input_file.files[0].size <= 10 * 1024 ** 2) {
-            block_msg.textContent = '';
-            download_link.style.display = 'none';
-            label__text.textContent = 'Файл вибрано';
-            submit_tool.style.display = 'block';
-        } else {
-            download_link.style.display = 'none';
-            submit_tool.style.display = 'none';
-            block_msg.textContent = 'Розмір файлу занадто великий.';
-            label__text.textContent = 'Виберіть файл'
-        }
-    }
 }

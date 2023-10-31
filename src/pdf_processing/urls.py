@@ -5,5 +5,6 @@ from src.pdf_processing import views
 app_name = 'pdf'
 
 urlpatterns = [
-    path('text-extract/', views.PdfProcessingView.as_view(), name='text_extract')
+    path('protect/', views.PdfProtectView.as_view(), name='protect'),
+    path('text-extract/', views.PdfTextExtractView.as_view(), name='text_extract'),
 ]
