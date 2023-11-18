@@ -140,14 +140,14 @@ body {
   border-bottom-right-radius: 3px;
   cursor: pointer;
 
-  background-image: url('/static/images/image_processing/caret-left.svg');
+  background-image: url('/src/staticatic/images/image_processing/caret-left.svg');
   background-size: 10px;
   background-repeat: no-repeat;
   background-position: center center;
 }
 
 .toolpanel.closed .content .hide-show-handler {
-  background-image: url('/static/images/image_processing/caret-right.svg');
+  background-image: url('/src/staticatic/images/image_processing/caret-right.svg');
 }
 
 .spectrum.with-add-on {
