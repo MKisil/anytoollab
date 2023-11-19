@@ -36,7 +36,7 @@ class PdfProtectView(FormView):
     template_name = 'pdf_processing/pdf_processing.html'
 
     def form_invalid(self, form):
-        print([str(error) for field, error in form.errors.items()])
+        # print([str(error) for field, error in form.errors.items()])
         return JsonResponse({'message': 'Некорректний pdf файл'})
 
     def form_valid(self, form):
