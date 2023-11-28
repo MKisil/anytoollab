@@ -4,46 +4,50 @@ main {
     align-items: center;
 }
 
-label {
-    font-size: 18px;
-    color: #333333;
+.btn {
+    float: right;
 }
 
-.pdf_tool {
-    padding: 120px 50px;
-    border: 2px solid #ddd3ed;
-    border-radius: 5px;
-}
+/*label {*/
+/*    font-size: 18px;*/
+/*    color: #333333;*/
+/*}*/
 
-input[type=file] {
-    display: none;
-}
+/*.pdf_tool {*/
+/*    padding: 120px 50px;*/
+/*    border: 2px solid #ddd3ed;*/
+/*    border-radius: 5px;*/
+/*}*/
 
-label[for=id_file] {
-    font-size: 20px;
-    color: white;
-    padding: 20px 30px;
-    border-radius: 6px;
-    background-color: #ffbd03;
-}
+/*input[type=file] {*/
+/*    display: none;*/
+/*}*/
 
-label[for=id_file]:hover {
-    background-color: #ffd84e;
-    cursor: pointer;
-}
+/*label[for=id_file] {*/
+/*    font-size: 20px;*/
+/*    color: white;*/
+/*    padding: 20px 30px;*/
+/*    border-radius: 6px;*/
+/*    background-color: #ffbd03;*/
+/*}*/
 
-#file_form, .pdf_tool {
-    font-family: 'Source Code Pro', monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+/*label[for=id_file]:hover {*/
+/*    background-color: #ffd84e;*/
+/*    cursor: pointer;*/
+/*}*/
 
-#file_form {
-    gap: 20px;
-}
+/*#file_form, .pdf_tool {*/
+/*    font-family: 'Source Code Pro', monospace;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*}*/
 
-#submit_tool, #download_link {
+/*#file_form {*/
+/*    gap: 20px;*/
+/*}*/
+
+#download_link {
     font-family: inherit;
     color: white;
     font-size: 12px;
@@ -54,9 +58,9 @@ label[for=id_file]:hover {
     width: fit-content;
 }
 
-#submit_tool:hover, #download_link:hover {
-    cursor: pointer;
-}
+/*#submit_tool:hover, #download_link:hover {*/
+/*    cursor: pointer;*/
+/*}*/
 
 .loader {
     display: none;

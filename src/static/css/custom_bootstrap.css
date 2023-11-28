@@ -1,0 +1,7 @@
+.custom-file-input:lang(uk)~.custom-file-label::after {
+    content: "Вибрати";
+}
+
+.custom-file-input:hover {
+    cursor: pointer;
+}

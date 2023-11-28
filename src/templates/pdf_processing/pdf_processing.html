@@ -1,5 +1,6 @@
 {% extends '../base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/pdf_processing/style.css' %}">
 {% endblock head %}
@@ -11,28 +12,16 @@
                 <div class="pdf_tool__msg">
                     <p class="pdf_tool__msg-text"></p>
                 </div>
-                <form id="file_form" action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        {% if field.name == 'file' %}
-                            <label for="{{ field.id_for_label }}">
-                                <span class="label__text">Виберіть файл</span>
-                                {{ field }}
-                            </label>
-                        {% else %}
-                            <div class="form_field">{{ field.label_tag }} {{ field }}</div>
-                        {% endif %}
-                    {% endfor %}
-                    <button type="submit" id="submit_tool">{{ form_btn_text }}</button>
-                    <a href="#" id="download_link" style="display: none;">Завантажити
-                        результат</a>
-                </form>
+                {% crispy form %}
+{#                    <button type="submit" class="btn btn-primary">{{ form_btn_text }}</button>#}
+                    {#                    <a href="#" id="download_link" style="display: none;">Завантажити#}
+                    {#                        результат</a>#}
                 <div class="loader"></div>
             </div>
         </div>
     </section>
 {% endblock content %}
 {% block js %}
-    <script src="{% static 'js/pdf_processing/ajax_send_file.js' %}"></script>
-    <script src="{% static 'js/pdf_processing/main.js' %}"></script>
+    {#    <script src="{% static 'js/pdf_processing/ajax_send_file.js' %}"></script>#}
+    {#    <script src="{% static 'js/pdf_processing/main.js' %}"></script>#}
 {% endblock js %}

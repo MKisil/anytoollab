@@ -16,6 +16,7 @@ from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(filename='.env_dev'))
+load_dotenv(find_dotenv(filename='.env'))
 
 
 def get_env_variable(var_name):
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap4',
 
     'src.main.apps.MainConfig',
     'src.pdf_processing.apps.PdfProcessingConfig',
@@ -120,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk'
 
 TIME_ZONE = 'UTC'
 
@@ -132,10 +135,43 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_DIR = os.path.join(BASE_DIR, 'src/static')
-STATICFILES_DIRS = [STATIC_DIR]
+STATICFILES_DIRS = [
+    BASE_DIR / 'src/static'
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'src/media')
+# MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
+            'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
+            'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
+            'region_name': get_env_variable('AWS_S3_REGION_NAME'),
+            'location': get_env_variable('AWS_LOCATION'),
+        },
+    },
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
+            'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
+            'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
+            'region_name': get_env_variable('AWS_S3_REGION_NAME'),
+            'file_overwrite': False,
+        },
+    },
+}
+
