@@ -3,10 +3,18 @@ import re
 from django import forms
 from pypdf.errors import PdfReadError
 from pypdf import PdfReader
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 
 class PDFFileUploadForm(forms.Form):
-    file = forms.FileField()
+    file = forms.FileField(label='Файл', widget=forms.FileInput(attrs={'accept': 'application/pdf'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.add_input(Submit('submit', 'Здійснити', css_class='btn btn-primary'))
+        self.helper.form_id = 'pdf_form'
 
     def clean_file(self):
         cleaned_data = self.clean()

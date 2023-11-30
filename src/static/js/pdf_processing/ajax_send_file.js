@@ -11,7 +11,6 @@ function ajaxSend(url, data) {
     })
         .then(response => {
             const content_type = response.headers.get('Content-Type');
-            console.log(response.headers)
             if (content_type === 'application/json') {
                 return response.json();
             } else {
@@ -31,6 +30,7 @@ function ajaxSend(url, data) {
                 download_link.href = url;
                 download_link.style.display = 'block';
             } else {
+                console.log(data.message);
                 block_msg.textContent = data.message;
             }
         })

@@ -2,3 +2,10 @@ Django==4.2.7
 psycopg==3.1.13
 pypdf==3.17.0
 python-dotenv==1.0.0
+django-crispy-forms==2.1
+crispy-bootstrap4==2023.1
+django-storages==1.14.2
+boto3==1.29.6
+celery[redis]==5.3.6
+django-celery-beat==2.5.0
+redis==5.0.1

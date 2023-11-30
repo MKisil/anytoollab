@@ -12,7 +12,7 @@ services:
       - .env_dev
     depends_on:
       - database
-
+      - worker
     restart: always
 
   database:
@@ -24,6 +24,21 @@ services:
     ports:
       - '5432:5432'
     restart: always
+
+  redis:
+    image: redis:7.2.3-alpine3.18
+    ports:
+      - '6379:6379'
+    restart: always
+
+  worker:
+    build:
+      context: .
+    command: >
+      sh -c "celery -A config worker -l INFO"
+    restart: always
+    depends_on:
+      - redis
 
 volumes:
   postgres-data:
