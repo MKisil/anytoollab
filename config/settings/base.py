@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap4',
+    'django_celery_beat',
 
     'src.main.apps.MainConfig',
     'src.pdf_processing.apps.PdfProcessingConfig',
@@ -174,4 +175,6 @@ STORAGES = {
         },
     },
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379'
 
