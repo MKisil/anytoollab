@@ -1,15 +1,10 @@
 import io
+import os
 import re
 
 from pypdf import PdfReader, PdfWriter
 
-
-def extract_text_from_pdf(pdf_file):
-    reader = PdfReader(pdf_file)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text.replace('\n', '\r\n')
+from config.settings.base import MEDIA_ROOT
 
 
 def check_password(password, max_length=30):
@@ -32,3 +27,7 @@ def pdf_protect(pdf_file, password):
     output.seek(0)
 
     return output
+
+
+def full_path(file_path):
+    return os.path.join(MEDIA_ROOT, file_path)

@@ -6,14 +6,15 @@ services:
       - '8000:8000'
     volumes:
       - .:/myproject
-    entrypoint: ['python', 'manage.py']
-    command: ['runserver', '0.0.0.0:8000', '--settings=config.settings.local']
+    entrypoint: [ 'python', 'manage.py' ]
+    command: [ 'runserver', '0.0.0.0:8000', '--settings=config.settings.local' ]
     env_file:
       - .env_dev
     depends_on:
       - database
       - worker
       - flower
+      - redis
     restart: always
 
   database:
@@ -28,13 +29,17 @@ services:
 
   redis:
     image: redis:7.2.3-alpine3.18
+    ports:
+      - '6379:6379'
     restart: always
 
   worker:
     build:
       context: .
-    entrypoint: ['celery']
-    command: ['-A', 'config', 'worker', '-l', 'INFO']
+    volumes:
+      - ./src/media:/myproject/src/media
+    entrypoint: [ 'celery' ]
+    command: [ '--workdir=/myproject', '-A', 'config', 'worker', '-l', 'INFO' ]
     env_file:
       - .env_dev
     depends_on:
@@ -46,8 +51,8 @@ services:
   flower:
     build:
       context: .
-    entrypoint: ['celery']
-    command: ['-A', 'config.celery.app', 'flower']
+    entrypoint: [ 'celery' ]
+    command: [ '-A', 'config.celery.app', 'flower' ]
     depends_on:
       - redis
     ports:
