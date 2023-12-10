@@ -1,11 +1,12 @@
 from django.http import JsonResponse, FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 
-from src.pdf_processing import services, tasks
-from src.pdf_processing.forms import PDFFileUploadForm, PDFFileProtectForm
-from src.pdf_processing.models import File
+from src.apps.pdf_processing import services
+from src.apps.pdf_processing import tasks
+from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileProtectForm
+from src.apps.pdf_processing.models import File
 
 
 class DownloadResultView(TemplateView):

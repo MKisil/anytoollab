@@ -1,6 +1,6 @@
 from django.urls import path
 
-from src.pdf_processing import views
+from src.apps.pdf_processing import views
 
 app_name = 'pdf'
 

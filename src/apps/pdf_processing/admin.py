@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from src.pdf_processing.models import File
+from src.apps.pdf_processing.models import File
 
 
 class FileAdmin(admin.ModelAdmin):

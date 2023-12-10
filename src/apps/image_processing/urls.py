@@ -1,6 +1,6 @@
 from django.urls import path
 
-from src.image_processing import views
+from src.apps.image_processing import views
 
 app_name = 'image'
 

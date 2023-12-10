@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MainConfig(AppConfig):
+class ImageProcessingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'src.main'
+    name = 'src.apps.image_processing'

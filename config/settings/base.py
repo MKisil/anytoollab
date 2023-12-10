@@ -55,9 +55,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'src.main.apps.MainConfig',
-    'src.pdf_processing.apps.PdfProcessingConfig',
-    'src.image_processing.apps.ImageProcessingConfig',
+    'src.apps.main.apps.MainConfig',
+    'src.apps.pdf_processing.apps.PdfProcessingConfig',
+    'src.apps.image_processing.apps.ImageProcessingConfig',
+    'src.apps.notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [

@@ -3,7 +3,7 @@ from io import BytesIO
 from pypdf import PdfReader
 
 from config.celery import app
-from ..notifications.tasks import send_notification
+from src.apps.notifications.tasks import send_notification
 
 
 @app.task

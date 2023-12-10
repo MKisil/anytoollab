@@ -15,7 +15,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from channels.auth import AuthMiddlewareStack
 
-from src.notifications import routing
+from src.apps.notifications import routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 

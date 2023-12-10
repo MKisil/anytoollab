@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ImageProcessingConfig(AppConfig):
+class PdfProcessingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'src.image_processing'
+    name = 'src.apps.pdf_processing'
