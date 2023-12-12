@@ -15,6 +15,7 @@ services:
       - worker
       - flower
       - redis
+      - celery_beats
     restart: always
 
   database:
@@ -46,6 +47,20 @@ services:
       - redis
       - flower
       - database
+    restart: always
+
+  celery_beats:
+    build:
+      context: .
+    entrypoint: [ 'celery' ]
+    command: [ '--workdir=/myproject', '-A', 'config', 'beat', '-l', 'INFO', '--scheduler', 'django_celery_beat.schedulers:DatabaseScheduler' ]
+    env_file:
+      - .env_dev
+    depends_on:
+      - redis
+      - flower
+      - database
+      - worker
     restart: always
 
   flower:

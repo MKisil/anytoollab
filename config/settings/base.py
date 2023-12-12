@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'django_celery_beat',
+    'django_cleanup.apps.CleanupConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
