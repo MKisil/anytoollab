@@ -13,15 +13,8 @@
                     <p class="pdf_tool__msg-text"></p>
                 </div>
                 {% crispy form %}
-{#                    <button type="submit" class="btn btn-primary">{{ form_btn_text }}</button>#}
-                    {#                    <a href="#" id="download_link" style="display: none;">Завантажити#}
-                    {#                        результат</a>#}
                 <div class="loader"></div>
             </div>
         </div>
     </section>
 {% endblock content %}
-{% block js %}
-    {#    <script src="{% static 'js/pdf_processing/ajax_send_file.js' %}"></script>#}
-    {#    <script src="{% static 'js/pdf_processing/main.js' %}"></script>#}
-{% endblock js %}

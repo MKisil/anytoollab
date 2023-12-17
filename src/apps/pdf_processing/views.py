@@ -5,7 +5,7 @@ from django.views.generic import FormView, TemplateView
 
 from src.apps.pdf_processing import services
 from src.apps.pdf_processing import tasks
-from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileProtectForm
+from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileEncryptForm, PDFFileDecryptForm
 from src.apps.pdf_processing.models import File
 
 
@@ -32,13 +32,23 @@ class PdfTextExtractView(FormView):
         return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
 
 
-class PdfProtectView(FormView):
-    form_class = PDFFileProtectForm
+class PdfEncryptView(FormView):
+    form_class = PDFFileEncryptForm
     template_name = 'pdf_processing/pdf_processing.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
-        tasks.pdf_encrypt(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
+        tasks.pdf_encrypt.delay(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
+        return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+
+
+class PdfDecryptView(FormView):
+    form_class = PDFFileDecryptForm
+    template_name = 'pdf_processing/pdf_processing.html'
+
+    def form_valid(self, form):
+        file_obj = File.objects.create(file=form.cleaned_data['file'])
+        tasks.pdf_decrypt.delay(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
         return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
 
 # class TestView(FormView):
