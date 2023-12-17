@@ -158,28 +158,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
-            'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
-            'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
-            'region_name': get_env_variable('AWS_S3_REGION_NAME'),
-            'location': get_env_variable('AWS_LOCATION'),
-        },
-    },
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-        "OPTIONS": {
-            'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
-            'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
-            'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
-            'region_name': get_env_variable('AWS_S3_REGION_NAME'),
-            'file_overwrite': False,
-        },
-    },
-}
+# STORAGES = {
+#     "staticfiles": {
+#         "BACKEND": "storages.backends.s3.S3Storage",
+#         "OPTIONS": {
+#             'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
+#             'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
+#             'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
+#             'region_name': get_env_variable('AWS_S3_REGION_NAME'),
+#             'location': get_env_variable('AWS_LOCATION'),
+#         },
+#     },
+#     "default": {
+#         "BACKEND": "storages.backends.s3.S3Storage",
+#         "OPTIONS": {
+#             'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
+#             'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
+#             'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
+#             'region_name': get_env_variable('AWS_S3_REGION_NAME'),
+#             'file_overwrite': False,
+#         },
+#     },
+# }
 
 REDIS_HOST = "redis"
 REDIS_PORT = 6379

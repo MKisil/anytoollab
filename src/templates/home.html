@@ -16,10 +16,17 @@
                             </a>
                         </li>
                         <li class="menu__item">
-                            <a href="{% url 'pdf:text_extract' %}" class="menu__item-link">
-                                - Робота із файлами
-                                <img src="{% static 'images/files_icon.png' %}" alt="Іконка інструменту"
+                            - Робота із файлами
+                            <img src="{% static 'images/files_icon.png' %}" alt="Іконка інструменту"
                                      class="menu__item-img">
+                            <a href="{% url 'pdf:text_extract' %}" class="menu__item-link">
+                                - Витягти текст із pdf
+                            </a>
+                            <a href="{% url 'pdf:protect' %}" class="menu__item-link">
+                                - Захистити pdf
+                            </a>
+                            <a href="{% url 'pdf:text_extract' %}" class="menu__item-link">
+                                - Зняти захист із pdf
                             </a>
                         </li>
                         <li class="menu__item">

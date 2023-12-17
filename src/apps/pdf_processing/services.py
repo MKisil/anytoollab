@@ -15,19 +15,5 @@ def check_password(password, max_length=30):
     return pattern_password.match(password)
 
 
-def pdf_protect(pdf_file, password):
-    reader = PdfReader(pdf_file)
-
-    writer = PdfWriter()
-    writer.append_pages_from_reader(reader)
-    writer.encrypt(password)
-
-    output = io.BytesIO()
-    writer.write(output)
-    output.seek(0)
-
-    return output
-
-
 def full_path(file_path):
     return os.path.join(MEDIA_ROOT, file_path)
