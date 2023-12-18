@@ -12,4 +12,4 @@ class File(models.Model):
     )
     file = models.FileField(upload_to='pdf_processing/')
     time_add = models.DateTimeField(auto_now_add=True)
-    is_used = models.BooleanField(default=False)  # needed to know whether this file has been processed
+    is_used = models.BooleanField(default=False, null=True)  # needed to know whether this file has been processed
