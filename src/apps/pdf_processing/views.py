@@ -13,7 +13,12 @@ class DownloadResultView(TemplateView):
     template_name = 'pdf_processing/download_result.html'
 
     def get(self, request, *args, **kwargs):
-        get_object_or_404(File, id=self.kwargs['file_id'])
+        file_obj = get_object_or_404(File, id=self.kwargs['file_id'])
+        if file_obj.is_used:
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            file_obj.is_used = True
+            file_obj.save()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
