@@ -1,5 +1,7 @@
 import io
+import fitz
 from io import BytesIO
+from unidecode import unidecode
 
 from django.core.files.base import ContentFile
 from pypdf import PdfReader, PdfWriter
@@ -11,17 +13,28 @@ from src.apps.pdf_processing.models import File
 
 @app.task
 def extract_text_from_pdf(file_path, file_id):
-    with open(file_path, 'rb') as file:
-        reader = PdfReader(BytesIO(file.read()))
+    doc = fitz.open(file_path)
 
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
+    output = []
 
-    text = text.replace('\n', '\r\n')
+    for page in doc:
+        output += page.get_text("blocks")
+
+    result_text = ''
+    previous_block_id = 0
+    for block in output:
+
+        if block[6] == 0:
+
+            if previous_block_id != block[5]:
+                result_text += "\n"
+
+            plain_text = unidecode(block[4])
+
+            result_text += plain_text
 
     file_obj = File()
-    file_obj.file.save(f'result_{file_id}.txt', ContentFile(text))
+    file_obj.file.save(f'result_{file_id}.txt', ContentFile(result_text))
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
 

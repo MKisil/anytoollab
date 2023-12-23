@@ -13,7 +13,7 @@ services:
     depends_on:
       - database
       - worker
-      - flower
+#      - flower
       - redis
       - celery_beats
     restart: always
@@ -45,7 +45,7 @@ services:
       - .env_dev
     depends_on:
       - redis
-      - flower
+#      - flower
       - database
     restart: always
 
@@ -58,20 +58,20 @@ services:
       - .env_dev
     depends_on:
       - redis
-      - flower
+#      - flower
       - database
       - worker
     restart: always
 
-  flower:
-    build:
-      context: .
-    entrypoint: [ 'celery' ]
-    command: [ '-A', 'config.celery.app', 'flower' ]
-    depends_on:
-      - redis
-    ports:
-      - "5555:5555"
+#  flower:
+#    build:
+#      context: .
+#    entrypoint: [ 'celery' ]
+#    command: [ '-A', 'config.celery.app', 'flower' ]
+#    depends_on:
+#      - redis
+#    ports:
+#      - "5555:5555"
 
 volumes:
   postgres-data:
