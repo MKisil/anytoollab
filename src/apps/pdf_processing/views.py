@@ -1,11 +1,13 @@
 from django.http import JsonResponse, FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, TemplateView
 
 from src.apps.pdf_processing import services
 from src.apps.pdf_processing import tasks
-from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileEncryptForm, PDFFileDecryptForm
+from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileEncryptForm, PDFFileDecryptForm, PDFFileSplitForm
 from src.apps.pdf_processing.models import File
 
 
@@ -29,7 +31,7 @@ class DownloadResultView(TemplateView):
 
 class PdfTextExtractView(FormView):
     form_class = PDFFileUploadForm
-    template_name = 'pdf_processing/pdf_processing.html'
+    template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
@@ -39,7 +41,7 @@ class PdfTextExtractView(FormView):
 
 class PdfEncryptView(FormView):
     form_class = PDFFileEncryptForm
-    template_name = 'pdf_processing/pdf_processing.html'
+    template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
@@ -49,7 +51,7 @@ class PdfEncryptView(FormView):
 
 class PdfDecryptView(FormView):
     form_class = PDFFileDecryptForm
-    template_name = 'pdf_processing/pdf_processing.html'
+    template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
@@ -59,12 +61,24 @@ class PdfDecryptView(FormView):
 
 class PdfCompressView(FormView):
     form_class = PDFFileUploadForm
-    template_name = 'pdf_processing/pdf_processing.html'
+    template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
         tasks.pdf_compress.delay(services.full_path(file_obj.file.path), str(file_obj.id))
         return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PdfSplitView(TemplateView):
+    template_name = 'pdf_processing/pdf_split.html'
+
+    def post(self, request, *args, **kwargs):
+        form = PDFFileSplitForm(request.POST, request.FILES)
+        if form.is_valid():
+            return JsonResponse({'msg': 'success'})
+        else:
+            return JsonResponse({'msg': 'error'})
 
 # class TestView(FormView):
 #     form_class = PDFFileUploadForm

@@ -20,10 +20,8 @@ class PDFFileUploadForm(forms.Form):
         file = self.cleaned_data['file']
         try:
             reader = PdfReader(file)
-            if reader.is_encrypted:
-                raise forms.ValidationError('PDF файл зашифрований.')
         except PdfReadError:
-            raise forms.ValidationError('Некорректний pdf файл.')
+            raise forms.ValidationError('Incorrect pdf file.')
         else:
             return file
 
@@ -65,3 +63,22 @@ class PDFFileDecryptForm(PDFFileUploadForm):
 
     def clean_file(self):
         return self.cleaned_data['file']
+
+
+class PDFFileSplitForm(PDFFileUploadForm):
+    password = forms.CharField(max_length=30)
+    selected_pages = forms.CharField(max_length=1000)
+    save_separate = forms.BooleanField()
+
+    def clean_password(self):
+        return self.cleaned_data['password']
+
+    def clean_selected_pages(self):
+        selected_pages = self.cleaned_data['selected_pages']
+
+        if not selected_pages.replace(',', '').isdigit():
+            raise forms.ValidationError('Incorrect page numbers.')
+
+        return selected_pages
+
+
