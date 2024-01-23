@@ -76,9 +76,17 @@ class PdfSplitView(TemplateView):
     def post(self, request, *args, **kwargs):
         form = PDFFileSplitForm(request.POST, request.FILES)
         if form.is_valid():
-            return JsonResponse({'msg': 'success'})
+            file_obj = File.objects.create(file=form.cleaned_data['file'])
+            tasks.pdf_split.delay(
+                file_path=services.full_path(file_obj.file.path),
+                file_id=str(file_obj.id),
+                selected_pages=form.cleaned_data.get('selected_pages', []),
+                save_separate=form.cleaned_data.get('save_separate', False),
+                password=form.cleaned_data.get('password', ''),
+            )
+            return JsonResponse({'message': 'success', 'file_id': file_obj.id})
         else:
-            return JsonResponse({'msg': 'error'})
+            return JsonResponse({'message': 'error'})
 
 # class TestView(FormView):
 #     form_class = PDFFileUploadForm

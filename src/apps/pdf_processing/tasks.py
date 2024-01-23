@@ -1,4 +1,6 @@
 import io
+import zipfile
+
 import fitz
 from io import BytesIO
 from unidecode import unidecode
@@ -99,7 +101,6 @@ def pdf_compress(file_path, file_id):
     for page in writer.pages:
         page.compress_content_streams()
 
-
     output = io.BytesIO()
     writer.write(output)
     output.seek(0)
@@ -110,3 +111,54 @@ def pdf_compress(file_path, file_id):
     output.close()
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
+
+
+@app.task
+def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=''):
+    selected_pages = map(lambda x: int(x), sorted(selected_pages.split(',')))
+
+    doc = fitz.open(file_path)
+    doc.authenticate(password)
+
+    if save_separate:
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w') as zip:
+            for p in selected_pages:
+                pdf_page = fitz.open()
+                pdf_page.insert_pdf(doc, from_page=p, to_page=p)
+
+                output = io.BytesIO()
+                pdf_page.save(output)
+                output.seek(0)
+
+                zip.writestr(f'page_{p}.pdf', output.getvalue())
+
+                pdf_page.close()
+                output.close()
+
+        zip_buffer.seek(0)
+
+        file_obj = File()
+        file_obj.file.save(f'result_{file_id}.zip', ContentFile(zip_buffer.getvalue()))
+
+        zip_buffer.close()
+
+        send_notification.delay({'content': file_obj.file.url}, file_id)
+
+    else:
+        new_doc = fitz.open()
+
+        for p in selected_pages:
+            new_doc.insert_pdf(doc, from_page=p, to_page=p)
+
+        output = io.BytesIO()
+        new_doc.save(output)
+        output.seek(0)
+
+        file_obj = File()
+        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
+
+        new_doc.close()
+        output.close()
+
+        send_notification.delay({'content': file_obj.file.url}, file_id)
