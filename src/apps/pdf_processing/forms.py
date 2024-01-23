@@ -81,4 +81,12 @@ class PDFFileSplitForm(PDFFileUploadForm):
 
         return selected_pages
 
+    def clean_save_separate(self):
+        save_separate = self.cleaned_data['save_separate']
+
+        if save_separate == 'on':
+            return True
+        else:
+            return False
+
 
