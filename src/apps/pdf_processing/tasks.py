@@ -115,7 +115,7 @@ def pdf_compress(file_path, file_id):
 
 @app.task
 def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=''):
-    selected_pages = map(lambda x: int(x), sorted(selected_pages.split(',')))
+    selected_pages = sorted(map(lambda x: int(x), sorted(selected_pages.split(','))))
 
     doc = fitz.open(file_path)
     doc.authenticate(password)
@@ -125,7 +125,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         with zipfile.ZipFile(zip_buffer, 'w') as zip:
             for p in selected_pages:
                 pdf_page = fitz.open()
-                pdf_page.insert_pdf(doc, from_page=p, to_page=p)
+                pdf_page.insert_pdf(doc, from_page=p-1, to_page=p-1)
 
                 output = io.BytesIO()
                 pdf_page.save(output)
@@ -149,7 +149,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         new_doc = fitz.open()
 
         for p in selected_pages:
-            new_doc.insert_pdf(doc, from_page=p, to_page=p)
+            new_doc.insert_pdf(doc, from_page=p-1, to_page=p-1)
 
         output = io.BytesIO()
         new_doc.save(output)
