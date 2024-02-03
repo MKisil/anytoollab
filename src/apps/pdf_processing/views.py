@@ -7,7 +7,7 @@ from django.views.generic import FormView, TemplateView
 
 from src.apps.pdf_processing import services
 from src.apps.pdf_processing import tasks
-from src.apps.pdf_processing.forms import PDFFileUploadForm, PDFFileEncryptForm, PDFFileDecryptForm, PDFFileSplitForm
+from src.apps.pdf_processing import forms
 from src.apps.pdf_processing.models import File
 
 
@@ -30,7 +30,7 @@ class DownloadResultView(TemplateView):
 
 
 class PdfTextExtractView(FormView):
-    form_class = PDFFileUploadForm
+    form_class = forms.PDFFileUploadForm
     template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
@@ -40,7 +40,7 @@ class PdfTextExtractView(FormView):
 
 
 class PdfEncryptView(FormView):
-    form_class = PDFFileEncryptForm
+    form_class = forms.PDFFileEncryptForm
     template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
@@ -50,7 +50,7 @@ class PdfEncryptView(FormView):
 
 
 class PdfDecryptView(FormView):
-    form_class = PDFFileDecryptForm
+    form_class = forms.PDFFileDecryptForm
     template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
@@ -60,7 +60,7 @@ class PdfDecryptView(FormView):
 
 
 class PdfCompressView(FormView):
-    form_class = PDFFileUploadForm
+    form_class = forms.PDFFileUploadForm
     template_name = 'pdf_processing/file_upload.html'
 
     def form_valid(self, form):
@@ -74,7 +74,7 @@ class PdfSplitView(TemplateView):
     template_name = 'pdf_processing/pdf_split.html'
 
     def post(self, request, *args, **kwargs):
-        form = PDFFileSplitForm(request.POST, request.FILES)
+        form = forms.PDFFileSplitForm(request.POST, request.FILES)
         if form.is_valid():
             file_obj = File.objects.create(file=form.cleaned_data['file'])
             tasks.pdf_split.delay(
@@ -88,11 +88,24 @@ class PdfSplitView(TemplateView):
         else:
             return JsonResponse({'message': 'error'})
 
-# class TestView(FormView):
-#     form_class = PDFFileUploadForm
-#     template_name = 'pdf_processing/pdf_processing.html'
-#     success_url = 'home'
-#
-#     def form_valid(self, form):
-#         time.sleep(100)
-#         super().form_valid()
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PdfAddPageNumbersView(TemplateView):
+    template_name = 'pdf_processing/pdf_addpagenumbers.html'
+
+    def post(self, request, *args, **kwargs):
+        form = forms.PDFFileAddPageNumbersForm(request.POST, request.FILES)
+        if form.is_valid():
+            file_obj = File.objects.create(file=form.cleaned_data['file'])
+            tasks.pdf_addpagenumbers.delay(
+                file_path=services.full_path(file_obj.file.path),
+                file_id=str(file_obj.id),
+                password=form.cleaned_data.get('password', ''),
+                number_on_first_page=form.cleaned_data.get('number_on_first_page', False),
+                number_position=form.cleaned_data.get('number_position', 'c-bottom')
+            )
+            return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+        else:
+            print(form.errors)
+            print(form['number_position'].value())
+            return JsonResponse({'message': 'error'})

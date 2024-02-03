@@ -1,4 +1,5 @@
 import io
+import os
 import zipfile
 
 import fitz
@@ -7,6 +8,7 @@ from unidecode import unidecode
 
 from django.core.files.base import ContentFile
 from pypdf import PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
 
 from config.celery import app
 from src.apps.notifications.tasks import send_notification
@@ -125,7 +127,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         with zipfile.ZipFile(zip_buffer, 'w') as zip:
             for p in selected_pages:
                 pdf_page = fitz.open()
-                pdf_page.insert_pdf(doc, from_page=p-1, to_page=p-1)
+                pdf_page.insert_pdf(doc, from_page=p - 1, to_page=p - 1)
 
                 output = io.BytesIO()
                 pdf_page.save(output)
@@ -149,7 +151,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         new_doc = fitz.open()
 
         for p in selected_pages:
-            new_doc.insert_pdf(doc, from_page=p-1, to_page=p-1)
+            new_doc.insert_pdf(doc, from_page=p - 1, to_page=p - 1)
 
         output = io.BytesIO()
         new_doc.save(output)
@@ -162,3 +164,61 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         output.close()
 
         send_notification.delay({'content': file_obj.file.url}, file_id)
+
+
+@app.task
+def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=False, number_position='c-bottom'):
+    def create_page_pdf(w_h, tmp):
+        c = canvas.Canvas(tmp)
+        for i in range(1, len(w_h) + 1):
+            width, height = float(w_h[i-1].width), float(w_h[i-1].height)
+            if 'l' in number_position:
+                x = 10
+            elif 'c' in number_position:
+                x = width / 2
+            else:
+                x = width - 15
+            if 'top' in number_position:
+                y = height - 15
+            else:
+                y = 10
+            c.drawString(x, y, str(i))
+            c.showPage()
+        c.save()
+
+    def add_page_numbers(pdf_path):
+        tmp = "__tmp.pdf"
+
+        writer = PdfWriter()
+        with open(pdf_path, "rb") as f:
+            reader = PdfReader(f, strict=False)
+            if reader.is_encrypted:
+                reader.decrypt(password)
+            n = len(reader.pages)
+
+            create_page_pdf([reader.pages[p].mediabox for p in range(n)], tmp)
+
+            with open(tmp, "rb") as ftmp:
+                number_pdf = PdfReader(ftmp)
+                for p in range(n):
+                    page = reader.pages[p]
+                    if number_on_first_page or p != 0:
+                        numberLayer = number_pdf.pages[p]
+                        page.merge_page(numberLayer)
+                    writer.add_page(page)
+
+                if len(writer.pages):
+                    output = BytesIO()
+                    writer.write(output)
+                    output.seek(0)
+
+                    file_obj = File()
+                    file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
+
+                    output.close()
+
+                    send_notification.delay({'content': file_obj.file.url}, file_id)
+
+            os.remove(tmp)
+
+    add_page_numbers(file_path)
