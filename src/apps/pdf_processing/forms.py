@@ -93,7 +93,7 @@ class PDFFileSplitForm(PDFFileUploadForm):
 class PDFFileAddPageNumbersForm(PDFFileUploadForm):
     password = forms.CharField(max_length=200, required=False)
     number_position = forms.CharField(max_length=10)
-    number_on_first_page = forms.BooleanField()
+    number_on_first_page = forms.BooleanField(required=False)
 
     def clean_number_position(self):
         number_position = self.cleaned_data['number_position']
@@ -101,11 +101,3 @@ class PDFFileAddPageNumbersForm(PDFFileUploadForm):
         if number_position not in ['l-top', 'c-top', 'r-top', 'l-bottom', 'c-bottom', 'r-bottom']:
             raise forms.ValidationError('Incorrect position value for page numbers.')
         return number_position
-
-    def clean_number_on_first_page(self):
-        number_on_first_page = self.cleaned_data['number_on_first_page']
-
-        if number_on_first_page == 'on':
-            return True
-        else:
-            return False

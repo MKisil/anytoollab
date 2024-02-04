@@ -173,15 +173,15 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
         for i in range(1, len(w_h) + 1):
             width, height = float(w_h[i-1].width), float(w_h[i-1].height)
             if 'l' in number_position:
-                x = 10
+                x = 16
             elif 'c' in number_position:
                 x = width / 2
             else:
-                x = width - 15
+                x = width - 16
             if 'top' in number_position:
-                y = height - 15
+                y = height - 16
             else:
-                y = 10
+                y = 16
             c.drawString(x, y, str(i))
             c.showPage()
         c.save()
@@ -208,14 +208,11 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
                     writer.add_page(page)
 
                 if len(writer.pages):
-                    output = BytesIO()
-                    writer.write(output)
-                    output.seek(0)
-
                     file_obj = File()
-                    file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
-
-                    output.close()
+                    with BytesIO() as bytes_stream:
+                        writer.write(bytes_stream)
+                        bytes_stream.seek(0)
+                        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(bytes_stream.getvalue()))
 
                     send_notification.delay({'content': file_obj.file.url}, file_id)
 

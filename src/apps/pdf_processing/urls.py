@@ -5,6 +5,7 @@ from src.apps.pdf_processing import views
 app_name = 'pdf'
 
 urlpatterns = [
+    # path('test/', views.TestView.as_view(), name='test'),
     path('split/', views.PdfSplitView.as_view(), name='split'),
     path('encrypt/', views.PdfEncryptView.as_view(), name='encrypt'),
     path('decrypt/', views.PdfDecryptView.as_view(), name='decrypt'),

@@ -106,6 +106,15 @@ class PdfAddPageNumbersView(TemplateView):
             )
             return JsonResponse({'message': 'success', 'file_id': file_obj.id})
         else:
-            print(form.errors)
-            print(form['number_position'].value())
             return JsonResponse({'message': 'error'})
+
+
+# class TestView(FormView):
+#     form_class = forms.PDFFileAddPageNumbersForm
+#     template_name = 'pdf_processing/test.html'
+#
+#     def post(self, request, *args, **kwargs):
+#         form = forms.PDFFileAddPageNumbersForm(request.POST, request.FILES)
+#         form.is_valid()
+#         print(request.POST)
+#         return JsonResponse({'message': 'error'})
