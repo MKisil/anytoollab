@@ -172,17 +172,23 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
         c = canvas.Canvas(tmp)
         for i in range(1, len(w_h) + 1):
             width, height = float(w_h[i-1].width), float(w_h[i-1].height)
+
+            if 'top' in number_position:
+                y = height - 16
+            else:
+                y = 16
+
             if 'l' in number_position:
                 x = 16
             elif 'c' in number_position:
                 x = width / 2
             else:
                 x = width - 16
-            if 'top' in number_position:
-                y = height - 16
+
+            if 'r' in number_position:
+                c.drawRightString(x, y, str(i))
             else:
-                y = 16
-            c.drawString(x, y, str(i))
+                c.drawString(x, y, str(i))
             c.showPage()
         c.save()
 
