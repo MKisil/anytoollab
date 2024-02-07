@@ -101,3 +101,23 @@ class PDFFileAddPageNumbersForm(PDFFileUploadForm):
         if number_position not in ['l-top', 'c-top', 'r-top', 'l-bottom', 'c-bottom', 'r-bottom']:
             raise forms.ValidationError('Incorrect position value for page numbers.')
         return number_position
+
+
+class PDFFileRotateForm(PDFFileUploadForm):
+    password = forms.CharField(max_length=200, required=False)
+    document_rotation = forms.DecimalField(min_value=-270, max_value=270)
+    pages_rotation = forms.JSONField()
+
+    def clean_document_rotation(self):
+        return int(self.cleaned_data['document_rotation'])
+
+    def clean_pages_rotation(self):
+        pages_rotation = self.cleaned_data['pages_rotation']
+
+        if not ''.join(pages_rotation.keys()).replace('-', '0').isdigit():
+            raise forms.ValidationError('Incorrect page numbers.')
+
+        if len([angl for angl in pages_rotation.values() if angl % 10 == 0]) != len(pages_rotation.values()):
+            raise forms.ValidationError('Incorrect rotating angles for pages.')
+
+        return pages_rotation

@@ -60,6 +60,7 @@ def pdf_encrypt(file_path, file_id, password):
     file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
 
     output.close()
+    writer.close()
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
 
@@ -81,6 +82,7 @@ def pdf_decrypt(file_path, file_id, password):
     file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
 
     output.close()
+    writer.close()
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
 
@@ -111,6 +113,7 @@ def pdf_compress(file_path, file_id):
     file_obj.file.save(f'result_{file_id}.pdf', ContentFile(output.getvalue()))
 
     output.close()
+    writer.close()
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
 
@@ -171,7 +174,7 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
     def create_page_pdf(w_h, tmp):
         c = canvas.Canvas(tmp)
         for i in range(1, len(w_h) + 1):
-            width, height = float(w_h[i-1].width), float(w_h[i-1].height)
+            width, height = float(w_h[i - 1].width), float(w_h[i - 1].height)
 
             if 'top' in number_position:
                 y = height - 16
@@ -223,5 +226,33 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
                     send_notification.delay({'content': file_obj.file.url}, file_id)
 
             os.remove(tmp)
+            writer.close()
 
     add_page_numbers(file_path)
+
+
+@app.task
+def pdf_rotate(file_path, file_id, pages_rotation, document_rotation=0, password=''):
+    with open(file_path, 'rb') as file:
+        reader = PdfReader(BytesIO(file.read()))
+        if reader.is_encrypted:
+            reader.decrypt(password)
+
+    writer = PdfWriter()
+
+    for page_number in range(len(reader.pages)):
+        page = reader.pages[page_number]
+        page.rotate(
+            pages_rotation.get(str(page_number + 1), document_rotation)
+        )
+        writer.add_page(page)
+
+    file_obj = File()
+    with BytesIO() as bytes_stream:
+        writer.write(bytes_stream)
+        bytes_stream.seek(0)
+        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(bytes_stream.getvalue()))
+
+    writer.close()
+
+    send_notification.delay({'content': file_obj.file.url}, file_id)

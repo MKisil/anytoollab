@@ -109,6 +109,25 @@ class PdfAddPageNumbersView(TemplateView):
             return JsonResponse({'message': 'error'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class PdfRotateView(TemplateView):
+    template_name = 'pdf_processing/pdf_rotate.html'
+
+    def post(self, request, *args, **kwargs):
+        form = forms.PDFFileRotateForm(request.POST, request.FILES)
+        if form.is_valid():
+            file_obj = File.objects.create(file=form.cleaned_data['file'])
+            tasks.pdf_rotate.delay(
+                file_path=services.full_path(file_obj.file.path),
+                file_id=str(file_obj.id),
+                password=form.cleaned_data.get('password', ''),
+                document_rotation=form.cleaned_data.get('document_rotation', 0),
+                pages_rotation=form.cleaned_data.get('pages_rotation', {})
+            )
+            return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+        else:
+            return JsonResponse({'message': 'error'})
+
 # class TestView(FormView):
 #     form_class = forms.PDFFileAddPageNumbersForm
 #     template_name = 'pdf_processing/test.html'
