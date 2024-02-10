@@ -1,10 +1,48 @@
 import re
 
+from PIL import Image
 from django import forms
-from pypdf.errors import PdfReadError, FileNotDecryptedError
+from pypdf.errors import PdfReadError
 from pypdf import PdfReader
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleImageField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = []
+            for file_data in data:
+                file = single_file_clean(file_data, initial)
+                self.validate_file(file)
+                result.append(file)
+        else:
+            result = single_file_clean(data, initial)
+            self.validate_file(result)
+        return result
+
+    def validate_file(self, file):
+        if not file.name.endswith(('.png', '.jpg', '.jpeg')):
+            raise forms.ValidationError("Only files with .png, .jpg or .jpeg extensions are allowed.")
+
+        max_size = 200 * 1024 * 1024
+        if file.size > max_size:
+            raise forms.ValidationError("File size must be less than 200MB.")
+
+        try:
+            image = Image.open(file)
+            image.verify()
+        except Exception as e:
+            raise forms.ValidationError("The file is not a valid image.")
 
 
 class PDFFileUploadForm(forms.Form):
@@ -121,3 +159,10 @@ class PDFFileRotateForm(PDFFileUploadForm):
             raise forms.ValidationError('Incorrect rotating angles for pages.')
 
         return pages_rotation
+
+
+# class TestForm(forms.Form):
+#     images = MultipleImageField()
+
+    # def clean_files(self):
+    #     files = self.cleaned_data['images']
