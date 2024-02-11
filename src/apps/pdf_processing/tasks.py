@@ -4,6 +4,9 @@ import zipfile
 
 import fitz
 from io import BytesIO
+
+import img2pdf
+from PIL import Image
 from unidecode import unidecode
 
 from django.core.files.base import ContentFile
@@ -12,6 +15,7 @@ from reportlab.pdfgen import canvas
 
 from config.celery import app
 from src.apps.notifications.tasks import send_notification
+from src.apps.pdf_processing import services
 from src.apps.pdf_processing.models import File
 
 
@@ -254,5 +258,32 @@ def pdf_rotate(file_path, file_id, pages_rotation, document_rotation=0, password
         file_obj.file.save(f'result_{file_id}.pdf', ContentFile(bytes_stream.getvalue()))
 
     writer.close()
+
+    send_notification.delay({'content': file_obj.file.url}, file_id)
+
+
+@app.task
+def img_to_pdf(files_path, file_id, images_rotation, orientation='Auto orientation', size='A4'):
+    page_size = None
+    if size != 'Original':
+        page_size = services.get_page_size(size, orientation if orientation != 'Auto orientation' else 'Portrait')
+
+    image_bytes_list = []
+    for i, file_path in enumerate(files_path):
+        with Image.open(file_path) as img:
+            img_rotated = img.rotate(images_rotation[i])
+            img_byte_array = io.BytesIO()
+            img_rotated.save(img_byte_array, format=img.format)
+            img_byte_array.seek(0)
+            image_bytes_list.append(img_byte_array.getvalue())
+            img_byte_array.close()
+
+    file_obj = File()
+    if page_size:
+        inpt = (img2pdf.mm_to_pt(page_size['width']), img2pdf.mm_to_pt(page_size['height']))
+        layout_fun = img2pdf.get_layout_fun(inpt, auto_orient=True if orientation == 'Auto orientation' else False)
+        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(img2pdf.convert(image_bytes_list, layout_fun=layout_fun)))
+    else:
+        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(img2pdf.convert(image_bytes_list)))
 
     send_notification.delay({'content': file_obj.file.url}, file_id)

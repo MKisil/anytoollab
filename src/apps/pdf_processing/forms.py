@@ -18,19 +18,20 @@ class MultipleImageField(forms.FileField):
         super().__init__(*args, **kwargs)
 
     def clean(self, data, initial=None):
+        print(data)
         single_file_clean = super().clean
         if isinstance(data, (list, tuple)):
             result = []
             for file_data in data:
                 file = single_file_clean(file_data, initial)
-                self.validate_file(file)
+                self.validate_image(file)
                 result.append(file)
         else:
             result = single_file_clean(data, initial)
-            self.validate_file(result)
+            self.validate_image(result)
         return result
 
-    def validate_file(self, file):
+    def validate_image(self, file):
         if not file.name.endswith(('.png', '.jpg', '.jpeg')):
             raise forms.ValidationError("Only files with .png, .jpg or .jpeg extensions are allowed.")
 
@@ -161,8 +162,44 @@ class PDFFileRotateForm(PDFFileUploadForm):
         return pages_rotation
 
 
-# class TestForm(forms.Form):
-#     images = MultipleImageField()
+class ImgToPDFForm(forms.Form):
+    images = MultipleImageField()
+    images_rotation = forms.JSONField()
+    orientation = forms.CharField(max_length=20)
+    size = forms.CharField(max_length=20)
 
-    # def clean_files(self):
-    #     files = self.cleaned_data['images']
+    def clean_images_rotation(self):
+        images_rotation = self.cleaned_data['images_rotation']
+
+        for rotation in images_rotation:
+            if not isinstance(rotation, int) and rotation is not None:
+                raise forms.ValidationError('Incorrect rotating angles for images.')
+            if rotation > 270 or rotation < -270:
+                raise forms.ValidationError('Incorrect rotating angles for images.')
+
+        return images_rotation
+
+    def clean_orientation(self):
+        orientation = self.cleaned_data['orientation']
+
+        if orientation not in ['Auto orientation', 'Landscape', 'Portrait']:
+            raise forms.ValidationError('Incorrect page orientation.')
+
+        return orientation
+
+    def clean_size(self):
+        size = self.cleaned_data['size']
+
+        if size not in ['A3', 'A4', 'A5', 'US Letter', 'US Legal', 'Original']:
+            raise forms.ValidationError('Incorrect page size.')
+
+        return size
+
+
+class TestForm(forms.Form):
+    images = MultipleImageField()
+
+    def clean_files(self):
+        files = self.cleaned_data['images']
+        print(files)
+        return files

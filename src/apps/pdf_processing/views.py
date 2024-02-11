@@ -129,12 +129,42 @@ class PdfRotateView(TemplateView):
             return JsonResponse({'message': 'error'})
 
 
-# class TestView(FormView):
-#     form_class = forms.TestForm
-#     template_name = 'pdf_processing/test.html'
-#
-#     def post(self, request, *args, **kwargs):
-#         form = forms.TestForm(request.POST, request.FILES)
-#         print(form.is_valid())
-#         print(request.FILES, request.POST)
-#         return JsonResponse({'message': 'error'})
+@method_decorator(csrf_exempt, name='dispatch')
+class ImgToPdfView(TemplateView):
+    template_name = 'pdf_processing/img_to_pdf.html'
+
+    def post(self, request, *args, **kwargs):
+        form = forms.ImgToPDFForm(request.POST, request.FILES)
+        if form.is_valid():
+            images = form.cleaned_data["images"]
+
+            file_id = ''
+            files_path = []
+            for i, img in enumerate(images):
+                file_obj = File.objects.create(file=img)
+                files_path.append(services.full_path(file_obj.file.path))
+                if i == 0:
+                    file_id = file_obj.id
+
+            tasks.img_to_pdf.delay(
+                files_path=files_path,
+                file_id=str(file_id),
+                images_rotation=form.cleaned_data.get('images_rotation', []),
+                orientation=form.cleaned_data.get('orientation', 'Auto orientation'),
+                size=form.cleaned_data.get('size', 'A4')
+            )
+
+            return JsonResponse({'message': 'success', 'file_id': file_id})
+        else:
+            return JsonResponse({'message': 'error'})
+
+
+class TestView(FormView):
+    form_class = forms.TestForm
+    template_name = 'pdf_processing/test.html'
+
+    def post(self, request, *args, **kwargs):
+        form = forms.TestForm(request.POST, request.FILES)
+        print(form.is_valid())
+        print(request.FILES, request.POST)
+        return JsonResponse({'message': 'error'})
