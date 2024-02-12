@@ -271,7 +271,7 @@ def img_to_pdf(files_path, file_id, images_rotation, orientation='Auto orientati
     image_bytes_list = []
     for i, file_path in enumerate(files_path):
         with Image.open(file_path) as img:
-            img_rotated = img.rotate(images_rotation[i])
+            img_rotated = img.rotate(images_rotation[i], expand=True)
             img_byte_array = io.BytesIO()
             img_rotated.save(img_byte_array, format=img.format)
             img_byte_array.seek(0)
