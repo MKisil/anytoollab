@@ -300,7 +300,7 @@ def pdf_delete_pages(file_path, file_id, pages_to_delete, password=''):
     writer = PdfWriter()
 
     for n in range(len(reader.pages)):
-        if n not in pages_to_delete:
+        if n+1 not in pages_to_delete:
             writer.add_page(reader.pages[n])
 
     file_obj = File()
