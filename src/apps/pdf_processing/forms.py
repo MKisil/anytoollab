@@ -196,6 +196,19 @@ class ImgToPDFForm(forms.Form):
         return size
 
 
+class PDFDeletePagesForm(PDFFileUploadForm):
+    password = forms.CharField(max_length=200, required=False)
+    selected_pages = forms.JSONField()
+
+    def clean_selected_pages(self):
+        selected_pages = list(self.cleaned_data['selected_pages'])
+
+        if not all(isinstance(x, int) and x >= 0 for x in selected_pages):
+            raise forms.ValidationError('Incorrect page numbers.')
+
+        return selected_pages
+
+
 class TestForm(forms.Form):
     images = MultipleImageField()
 

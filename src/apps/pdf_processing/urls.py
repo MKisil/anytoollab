@@ -13,6 +13,7 @@ urlpatterns = [
     path('compress/', views.PdfCompressView.as_view(), name='compress'),
     path('img-to-pdf/', views.ImgToPdfView.as_view(), name='img_to_pdf'),
     path('text-extract/', views.PdfTextExtractView.as_view(), name='text_extract'),
+    path('delete-pages/', views.PdfDeletePagesView.as_view(), name='delete_pages'),
     path('add-page-numbers/', views.PdfAddPageNumbersView.as_view(), name='add_page_numbers'),
     path('download-result/<str:file_id>/', views.DownloadResultView.as_view(), name='download_result')
 ]

@@ -159,6 +159,26 @@ class ImgToPdfView(TemplateView):
             return JsonResponse({'message': 'error'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class PdfDeletePagesView(TemplateView):
+    template_name = 'pdf_processing/pdf_delete_pages.html'
+
+    def post(self, request, *args, **kwargs):
+        form = forms.PDFDeletePagesForm(request.POST, request.FILES)
+        if form.is_valid():
+            file_obj = File.objects.create(file=form.cleaned_data['file'])
+            tasks.pdf_delete_pages.delay(
+                file_path=services.full_path(file_obj.file.path),
+                file_id=str(file_obj.id),
+                password=form.cleaned_data.get('password', ''),
+                pages_to_delete=form.cleaned_data.get('selected_pages')
+            )
+            return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+        else:
+            print(form.errors)
+            return JsonResponse({'message': 'error'})
+
+
 class TestView(FormView):
     form_class = forms.TestForm
     template_name = 'pdf_processing/test.html'

@@ -282,8 +282,33 @@ def img_to_pdf(files_path, file_id, images_rotation, orientation='Auto orientati
     if page_size:
         inpt = (img2pdf.mm_to_pt(page_size['width']), img2pdf.mm_to_pt(page_size['height']))
         layout_fun = img2pdf.get_layout_fun(inpt, auto_orient=True if orientation == 'Auto orientation' else False)
-        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(img2pdf.convert(image_bytes_list, layout_fun=layout_fun)))
+        file_obj.file.save(f'result_{file_id}.pdf',
+                           ContentFile(img2pdf.convert(image_bytes_list, layout_fun=layout_fun)))
     else:
         file_obj.file.save(f'result_{file_id}.pdf', ContentFile(img2pdf.convert(image_bytes_list)))
+
+    send_notification.delay({'content': file_obj.file.url}, file_id)
+
+
+@app.task
+def pdf_delete_pages(file_path, file_id, pages_to_delete, password=''):
+    with open(file_path, 'rb') as file:
+        reader = PdfReader(BytesIO(file.read()))
+        if reader.is_encrypted:
+            reader.decrypt(password)
+
+    writer = PdfWriter()
+
+    for n in range(len(reader.pages)):
+        if n not in pages_to_delete:
+            writer.add_page(reader.pages[n])
+
+    file_obj = File()
+    with BytesIO() as bytes_stream:
+        writer.write(bytes_stream)
+        bytes_stream.seek(0)
+        file_obj.file.save(f'result_{file_id}.pdf', ContentFile(bytes_stream.getvalue()))
+
+    writer.close()
 
     send_notification.delay({'content': file_obj.file.url}, file_id)
