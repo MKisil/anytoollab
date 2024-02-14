@@ -1,0 +1,174 @@
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #000;
+    height: 100%;
+}
+
+.file_edit {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.file_input-label {
+    cursor: pointer;
+    padding: 20px 40px;
+    background-color: #7293ee;
+    border-radius: 3px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.file_input-label:hover {
+    background-color: #3e5892;
+}
+
+.password_input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.password_input-label {
+    line-height: normal;
+    padding-bottom: 15px;
+    word-break: break-all;
+}
+
+.filename {
+    font-weight: 600;
+    padding-bottom: 15px;
+}
+
+.label_wrapper {
+    padding-bottom: 15px;
+    max-width: 600px;
+}
+
+.password_input-label {
+    font-size: 20px;
+}
+
+.password_input-input {
+    border: 2px solid #7a7672;
+    border-radius: 3px;
+    padding: 10px 50px 10px 10px;
+    font-size: 18px;
+    max-width: 350px;
+}
+
+.password_input-input:hover {
+    border-color: #281900;
+}
+
+.input_password-inner {
+    position: relative;
+    width: fit-content;
+}
+
+.visibility_on, .visibility_off {
+    cursor: pointer;
+    right: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-right: 10px;
+}
+
+.visibility_on:hover svg,  .visibility_off:hover svg {
+    fill: #281900;
+}
+
+.submit:hover {
+    background-color: #4d869b;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.submit {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 15px 25px;
+    border-radius: 3px;
+    background-color: #92aec3;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+}
+
+.loader {
+    width: 15px;
+    aspect-ratio: 1;
+    background: #5eaaf7;
+    border-radius: 50%;
+    animation: l6 1s infinite linear alternate;
+}
+
+@keyframes l6 {
+    0% {
+        box-shadow: 15px 0 0 0 #5eaaf7, -25px 0 0 0 #5eaaf7;
+    }
+    50% {
+        box-shadow: 15px 0 0 0 #5eaaf7, -15px 0 0 0 #5eaaf7;
+    }
+    100% {
+        box-shadow: 25px 0 0 0 #5eaaf7, -15px 0 0 0 #5eaaf7;
+    }
+}
+
+.download_result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.download_title {
+    font-size: 24px;
+    margin-bottom: 17px;
+    color: #382f4f;
+}
+
+.download_link {
+    padding: 18px 28px;
+    background-color: #b298ea;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    letter-spacing: 1.5px;
+    margin-bottom: 35px;
+}
+
+.start_over {
+    padding: 10px 15px;
+    font-weight: 600;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    color: #8f8378;
+}
+
+.download_link:hover {
+    background-color: #c6a4f2;
+}
+
+.start_over:hover {
+    background-color: #e2e2e2;
+}
+
+.hidden {
+    display: none;
+}
+
+

@@ -175,7 +175,6 @@ class PdfDeletePagesView(TemplateView):
             )
             return JsonResponse({'message': 'success', 'file_id': file_obj.id})
         else:
-            print(form.errors)
             return JsonResponse({'message': 'error'})
 
 

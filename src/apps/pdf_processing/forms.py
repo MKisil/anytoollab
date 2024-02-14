@@ -18,7 +18,6 @@ class MultipleImageField(forms.FileField):
         super().__init__(*args, **kwargs)
 
     def clean(self, data, initial=None):
-        print(data)
         single_file_clean = super().clean
         if isinstance(data, (list, tuple)):
             result = []
@@ -58,7 +57,7 @@ class PDFFileUploadForm(forms.Form):
     def clean_file(self):
         file = self.cleaned_data['file']
         try:
-            reader = PdfReader(file)
+            PdfReader(file)
         except PdfReadError:
             raise forms.ValidationError('Incorrect pdf file.')
         else:
@@ -82,7 +81,7 @@ class PDFFileEncryptForm(PDFFileUploadForm):
 
 
 class PDFFileDecryptForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=30, widget=forms.PasswordInput(), label='Пароль',
+    password = forms.CharField(max_length=200, widget=forms.PasswordInput(), label='Пароль',
                                help_text='Введіть пароль, яким зашифровано pdf файл')
 
     def clean(self):
