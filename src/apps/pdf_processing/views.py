@@ -41,7 +41,7 @@ class PdfTextExtractView(FormView):
 
 class PdfEncryptView(FormView):
     form_class = forms.PDFFileEncryptForm
-    template_name = 'pdf_processing/file_upload.html'
+    template_name = 'pdf_processing/pdf_encrypt.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
