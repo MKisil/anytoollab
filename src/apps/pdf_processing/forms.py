@@ -4,8 +4,6 @@ from PIL import Image
 from django import forms
 from pypdf.errors import PdfReadError
 from pypdf import PdfReader
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -46,18 +44,15 @@ class MultipleImageField(forms.FileField):
 
 
 class PDFFileUploadForm(forms.Form):
-    file = forms.FileField(label='Файл', widget=forms.FileInput(attrs={'accept': 'application/pdf'}))
+    file = forms.FileField()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.add_input(Submit('submit', 'Здійснити', css_class='btn btn-primary'))
-        self.helper.form_id = 'pdf_form'
-
-    def clean_file(self):
+    def clean_file(self, check_if_encrypted=False):
         file = self.cleaned_data['file']
         try:
-            PdfReader(file)
+            reader = PdfReader(file)
+            if check_if_encrypted:
+                if reader.is_encrypted:
+                    raise forms.ValidationError('PDF file is encrypted.')
         except PdfReadError:
             raise forms.ValidationError('Incorrect pdf file.')
         else:
@@ -65,17 +60,19 @@ class PDFFileUploadForm(forms.Form):
 
 
 class PDFFileEncryptForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=30, widget=forms.PasswordInput(), label='Пароль',
-                               help_text='Пароль може містити латинські букви, цифри і !@#$%^&*()')
+    password = forms.CharField(max_length=30, help_text='The password can contain Latin letters, numbers and !@#$%^&*()')
+
+    def clean_file(self, *args, **kwargs):
+        return super().clean_file(check_if_encrypted=True)
 
     def clean_password(self):
         password = self.cleaned_data['password']
 
         if len(password) < 3:
-            raise forms.ValidationError('Пароль надто короткий.')
+            raise forms.ValidationError('The password is too short.')
 
         elif not bool(re.match('^[0-9a-zA-Z!@#$%^&*()]{3,}$', password)):
-            raise forms.ValidationError('Пароль містить некорректні символи.')
+            raise forms.ValidationError('Password contains invalid characters.')
 
         return password
 

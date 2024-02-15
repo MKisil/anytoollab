@@ -39,6 +39,7 @@ class PdfTextExtractView(FormView):
         return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PdfEncryptView(FormView):
     form_class = forms.PDFFileEncryptForm
     template_name = 'pdf_processing/pdf_encrypt.html'
@@ -46,9 +47,13 @@ class PdfEncryptView(FormView):
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
         tasks.pdf_encrypt.delay(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
-        return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+        return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+
+    def form_invalid(self, form):
+        return JsonResponse({'message': 'error'})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PdfDecryptView(FormView):
     form_class = forms.PDFFileDecryptForm
     template_name = 'pdf_processing/file_upload.html'
@@ -56,7 +61,10 @@ class PdfDecryptView(FormView):
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
         tasks.pdf_decrypt.delay(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
-        return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+        return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+
+    def form_invalid(self, form):
+        return JsonResponse({'message': 'error'})
 
 
 class PdfCompressView(FormView):
@@ -66,7 +74,10 @@ class PdfCompressView(FormView):
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
         tasks.pdf_compress.delay(services.full_path(file_obj.file.path), str(file_obj.id))
-        return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+        return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+
+    def form_invalid(self, form):
+        return JsonResponse({'message': 'error'})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
