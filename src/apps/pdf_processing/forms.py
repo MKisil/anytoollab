@@ -48,6 +48,11 @@ class PDFFileUploadForm(forms.Form):
 
     def clean_file(self, check_if_encrypted=False):
         file = self.cleaned_data['file']
+
+        max_size = 1024 * 1024 * 1024
+        if file.size > max_size:
+            raise forms.ValidationError('File size exceeds 1 GB.')
+
         try:
             reader = PdfReader(file)
             if check_if_encrypted:
