@@ -56,7 +56,7 @@ class PdfEncryptView(FormView):
 @method_decorator(csrf_exempt, name='dispatch')
 class PdfDecryptView(FormView):
     form_class = forms.PDFFileDecryptForm
-    template_name = 'pdf_processing/file_upload.html'
+    template_name = 'pdf_processing/pdf_decrypt.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])

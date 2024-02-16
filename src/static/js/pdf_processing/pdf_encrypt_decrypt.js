@@ -10,6 +10,7 @@ const loader = document.querySelector('.loader');
 const downloadResultLink = document.querySelector('.download_link');
 const startOverEl = document.querySelector('.start_over');
 const downloadBlock = document.querySelector('.download_result');
+const url = document.querySelector('.url');
 var pdf;
 
 
@@ -52,7 +53,7 @@ submit.addEventListener('click', function () {
         formData.append('file', pdf);
         formData.append('password', inputPassword.value);
 
-        fetch('http://127.0.0.1:8000/pdf-processing/encrypt/', {
+        fetch(url.href, {
             method: 'POST',
             body: formData
         }).then(response => response.json())

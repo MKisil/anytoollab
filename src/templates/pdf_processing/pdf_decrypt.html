@@ -13,14 +13,14 @@
 </head>
 <body>
 <div class="file_edit">
-    <a href="{% url 'pdf:encrypt' %}" class="url hidden"></a>
+    <a href="{% url 'pdf:decrypt' %}" class="url hidden"></a>
     <div class="file_input">
-        <label for="file_input-input" class="file_input-label">CHOOSE FILE</label>
+        <label for="file_input-input" class="file_input-label decrypt">CHOOSE FILE</label>
         <input type="file" id="file_input-input" class="file_input-input hidden" accept="application/pdf">
     </div>
     <div class="password_input hidden">
         <div class="label_wrapper">
-            <label for="password_input-input" class="password_input-label">Enter the password for: <span
+            <label for="password_input-input" class="password_input-label">Enter the password to: <span
                     class="filename"></span></label>
         </div>
         <div class="right">
@@ -44,8 +44,8 @@
     </div>
     <div class="loader hidden"></div>
     <div class="download_result hidden">
-        <h2 class="download_title">Your PDF has been protected!</h2>
-        <a class="download_link" download>DOWNLOAD</a>
+        <h2 class="download_title">Your PDF has been unlocked!</h2>
+        <a class="download_link decrypt" download>DOWNLOAD</a>
         <button class="start_over">START OVER</button>
     </div>
 </div>

@@ -161,6 +161,24 @@ body {
     background-color: #e2e2e2;
 }
 
+.download_link.decrypt {
+    background-color: #00738f;
+}
+
+.download_link.decrypt:hover {
+    background-color: #005174;
+}
+
+.file_input-label.decrypt {
+    background-color: #155762;
+}
+
+.file_input-label.decrypt:hover {
+    background-color: #0f3943;
+}
+
 .hidden {
     display: none;
 }
+
+

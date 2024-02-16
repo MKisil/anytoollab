@@ -84,21 +84,27 @@ class PDFFileEncryptForm(PDFFileUploadForm):
 
 
 class PDFFileDecryptForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=200, widget=forms.PasswordInput(), label='Пароль',
-                               help_text='Введіть пароль, яким зашифровано pdf файл')
+    password = forms.CharField(max_length=250)
 
     def clean(self):
         super(PDFFileDecryptForm, self).clean()
+
         file = self.cleaned_data['file']
         password = self.cleaned_data['password']
+
         try:
             reader = PdfReader(file)
             if not reader.is_encrypted:
-                raise forms.ValidationError('PDF файл не зашифрований.')
-            if not reader.decrypt(password):
-                raise forms.ValidationError('Невірний пароль.')
+                raise forms.ValidationError('The PDF file is not encrypted.')
+
+            decrypted = reader.decrypt(password)
+            if not decrypted:
+                raise forms.ValidationError('Invalid password.')
+            else:
+                reader.pages
+
         except PdfReadError:
-            raise forms.ValidationError('Некорректний pdf файл.')
+            raise forms.ValidationError('Invalid pdf file.')
 
         return self.cleaned_data
 
