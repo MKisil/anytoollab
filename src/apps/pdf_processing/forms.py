@@ -55,6 +55,7 @@ class PDFFileUploadForm(forms.Form):
 
         try:
             reader = PdfReader(file)
+            reader.pages
             if check_if_encrypted:
                 if reader.is_encrypted:
                     raise forms.ValidationError('PDF file is encrypted.')
