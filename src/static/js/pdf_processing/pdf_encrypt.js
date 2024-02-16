@@ -13,36 +13,36 @@ const downloadBlock = document.querySelector('.download_result');
 var pdf;
 
 
-inputFile.addEventListener('change', function(e) {
+inputFile.addEventListener('change', function (e) {
     const selectedFiles = e.target.files;
 
     if (selectedFiles.length > 0) {
-    	pdf = selectedFiles[0];
-    	inputFileBlock.classList.add('hidden');
-    	filenameElement.textContent = pdf.name;
-    	inputPasswordBlock.classList.remove('hidden');
+        pdf = selectedFiles[0];
+        inputFileBlock.classList.add('hidden');
+        filenameElement.textContent = pdf.name;
+        inputPasswordBlock.classList.remove('hidden');
     }
 });
 
 
-visibilityOn.addEventListener('click', function() {
+visibilityOn.addEventListener('click', function () {
     inputPassword.type = 'password';
     visibilityOn.classList.add('hidden');
     visibilityOff.classList.remove('hidden');
 });
 
-visibilityOff.addEventListener('click', function() {
+visibilityOff.addEventListener('click', function () {
     inputPassword.type = 'text';
     visibilityOn.classList.remove('hidden');
     visibilityOff.classList.add('hidden');
 });
 
-startOverEl.addEventListener('click', function() {
+startOverEl.addEventListener('click', function () {
     startOver();
 })
 
 
-submit.addEventListener('click', function() {
+submit.addEventListener('click', function () {
     if (inputPassword.value && inputFile.value) {
         inputFileBlock.classList.add('hidden');
         inputPasswordBlock.classList.add('hidden');
@@ -52,22 +52,22 @@ submit.addEventListener('click', function() {
         formData.append('file', pdf);
         formData.append('password', inputPassword.value);
 
-        fetch('http://127.0.0.1:8000/pdf-processing/protect/', {
+        fetch('http://127.0.0.1:8000/pdf-processing/encrypt/', {
             method: 'POST',
             body: formData
         }).then(response => response.json())
-        .then(data => {
-            if (data.message === 'success') {
-                handleSuccessSubmit(data.file_id)
-            } else {
-                startOver(true);
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid input data",
-                    text: "Check and make sure that you entered all the data correctly."
-                });
-            }
-        });
+            .then(data => {
+                if (data.message === 'success') {
+                    handleSuccessSubmit(data.file_id)
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid input data",
+                        text: "Check and make sure that you entered all the data correctly."
+                    })
+                    startOver(true);
+                }
+            });
     }
 
 });
@@ -79,21 +79,25 @@ function handleSuccessSubmit(roomName) {
         + '/ws/download_result/'
         + roomName
         + '/'
-        );
+    );
 
     chatSocket.onmessage = function (e) {
-        downloadBlock.classList.remove('hidden');
         const data = JSON.parse(e.data);
         downloadResultLink.href = data.message.content;
         chatSocket.close();
+        loader.classList.add('hidden');
+        downloadBlock.classList.remove('hidden');
     };
 }
 
 function startOver(error) {
+    inputFile.value = null;
+    inputPassword.value = null;
     if (!error) {
         downloadBlock.classList.add('hidden');
     }
     inputFileBlock.classList.remove('hidden');
     loader.classList.add('hidden');
+
 }
 
