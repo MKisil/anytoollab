@@ -48,13 +48,16 @@ def extract_text_from_pdf(file_path, file_id):
 
 
 @app.task
-def pdf_encrypt(file_path, file_id, password):
+def pdf_encrypt(file_path, file_id, old_password, new_password):
     with open(file_path, 'rb') as file:
         reader = PdfReader(BytesIO(file.read()))
 
+    if old_password:
+        reader.decrypt(old_password)
+
     writer = PdfWriter()
     writer.append_pages_from_reader(reader)
-    writer.encrypt(password, algorithm="AES-256")
+    writer.encrypt(new_password, algorithm="AES-256")
 
     output = io.BytesIO()
     writer.write(output)

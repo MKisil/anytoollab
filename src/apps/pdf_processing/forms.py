@@ -46,7 +46,7 @@ class MultipleImageField(forms.FileField):
 class PDFFileUploadForm(forms.Form):
     file = forms.FileField()
 
-    def clean_file(self, check_if_encrypted=False):
+    def clean_file(self):
         file = self.cleaned_data['file']
 
         max_size = 1024 * 1024 * 1024
@@ -56,9 +56,6 @@ class PDFFileUploadForm(forms.Form):
         try:
             reader = PdfReader(file)
             reader.pages
-            if check_if_encrypted:
-                if reader.is_encrypted:
-                    raise forms.ValidationError('PDF file is encrypted.')
         except PdfReadError:
             raise forms.ValidationError('Incorrect pdf file.')
         else:
@@ -66,13 +63,34 @@ class PDFFileUploadForm(forms.Form):
 
 
 class PDFFileEncryptForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=30, help_text='The password can contain Latin letters, numbers and !@#$%^&*()')
+    old_password = forms.CharField(max_length=250, required=False)
+    new_password = forms.CharField(max_length=30,
+                                   help_text='The password can contain Latin letters, numbers and !@#$%^&*()')
 
-    def clean_file(self, *args, **kwargs):
-        return super().clean_file(check_if_encrypted=True)
+    def clean(self):
+        super(PDFFileEncryptForm, self).clean()
 
-    def clean_password(self):
-        password = self.cleaned_data['password']
+        file = self.cleaned_data['file']
+        old_password = self.cleaned_data['old_password']
+
+        try:
+            reader = PdfReader(file)
+            reader.pages
+
+            if old_password:
+                if not reader.decrypt(old_password):
+                    raise forms.ValidationError('Invalid old password.')
+
+        except PdfReadError:
+            raise forms.ValidationError('Invalid pdf file.')
+
+        return self.cleaned_data
+
+    def clean_file(self):
+        return self.cleaned_data['file']
+
+    def clean_new_password(self):
+        password = self.cleaned_data['new_password']
 
         if len(password) < 3:
             raise forms.ValidationError('The password is too short.')

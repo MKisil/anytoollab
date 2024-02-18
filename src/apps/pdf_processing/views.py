@@ -46,7 +46,12 @@ class PdfEncryptView(FormView):
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
-        tasks.pdf_encrypt.delay(services.full_path(file_obj.file.path), str(file_obj.id), form.cleaned_data['password'])
+        tasks.pdf_encrypt.delay(services.full_path(
+            file_obj.file.path),
+            str(file_obj.id),
+            form.cleaned_data.get('old_password', ''),
+            form.cleaned_data.get('new_password')
+        )
         return JsonResponse({'message': 'success', 'file_id': file_obj.id})
 
     def form_invalid(self, form):
