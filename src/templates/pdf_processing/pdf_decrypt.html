@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pdf_processing/pdf_encrypt_decrypt.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pdf_processing/pdf_decrypt.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
@@ -39,7 +39,7 @@
                 </div>
                 <input type="password" id="password_input-input" class="password_input-input">
             </div>
-            <button type="submit" class="submit">PROTECT</button>
+            <button type="submit" class="submit">UNLOCK</button>
         </div>
     </div>
     <div class="loader hidden"></div>
@@ -49,6 +49,6 @@
         <button class="start_over">START OVER</button>
     </div>
 </div>
-    <script src="{% static 'js/pdf_processing/pdf_encrypt_decrypt.js' %}"></script>
+    <script src="{% static 'js/pdf_processing/pdf_decrypt.js' %}"></script>
 </body>
 </html>

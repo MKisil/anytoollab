@@ -14,15 +14,10 @@ body {
 .file_input-label {
     cursor: pointer;
     padding: 20px 40px;
-    background-color: #7293ee;
     border-radius: 3px;
     color: white;
     font-weight: 600;
     letter-spacing: 2px;
-}
-
-.file_input-label:hover {
-    background-color: #3e5892;
 }
 
 .password_input {
@@ -136,7 +131,6 @@ body {
 
 .download_link {
     padding: 18px 28px;
-    background-color: #b298ea;
     border-radius: 3px;
     font-weight: 600;
     font-size: 18px;
@@ -151,10 +145,6 @@ body {
     border: 1px solid #e2e2e2;
     border-radius: 3px;
     color: #8f8378;
-}
-
-.download_link:hover {
-    background-color: #c6a4f2;
 }
 
 .start_over:hover {
