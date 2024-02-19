@@ -29,14 +29,22 @@ class DownloadResultView(TemplateView):
         return context
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PdfTextExtractView(FormView):
     form_class = forms.PDFFileUploadForm
-    template_name = 'pdf_processing/file_upload.html'
+    template_name = 'pdf_processing/pdf_text_extract.html'
 
     def form_valid(self, form):
         file_obj = File.objects.create(file=form.cleaned_data['file'])
-        tasks.extract_text_from_pdf.delay(services.full_path(file_obj.file.path), str(file_obj.id))
-        return HttpResponseRedirect(reverse('pdf:download_result', kwargs={'file_id': file_obj.id}))
+        tasks.extract_text_from_pdf.delay(services.full_path(
+            file_obj.file.path),
+            str(file_obj.id),
+            form.cleaned_data.get('password', ''),
+        )
+        return JsonResponse({'message': 'success', 'file_id': file_obj.id})
+
+    def form_invalid(self, form):
+        return JsonResponse({'message': 'error'})
 
 
 @method_decorator(csrf_exempt, name='dispatch')

@@ -20,8 +20,11 @@ from src.apps.pdf_processing.models import File
 
 
 @app.task
-def extract_text_from_pdf(file_path, file_id):
+def extract_text_from_pdf(file_path, file_id, password):
     doc = fitz.open(file_path)
+
+    if password and doc.needs_pass:
+        doc.authenticate(password)
 
     output = []
 
@@ -48,12 +51,12 @@ def extract_text_from_pdf(file_path, file_id):
 
 
 @app.task
-def pdf_encrypt(file_path, file_id, old_password, new_password):
+def pdf_encrypt(file_path, file_id, password, new_password):
     with open(file_path, 'rb') as file:
         reader = PdfReader(BytesIO(file.read()))
 
-    if old_password:
-        reader.decrypt(old_password)
+    if password:
+        reader.decrypt(password)
 
     writer = PdfWriter()
     writer.append_pages_from_reader(reader)
