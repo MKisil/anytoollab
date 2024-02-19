@@ -11,24 +11,6 @@ from src.apps.pdf_processing import forms
 from src.apps.pdf_processing.models import File
 
 
-class DownloadResultView(TemplateView):
-    template_name = 'pdf_processing/download_result.html'
-
-    def get(self, request, *args, **kwargs):
-        file_obj = get_object_or_404(File, id=self.kwargs['file_id'])
-        if file_obj.is_used:
-            return HttpResponseRedirect(reverse('home'))
-        else:
-            file_obj.is_used = True
-            file_obj.save()
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['file_id'] = self.kwargs.get('file_id')
-        return context
-
-
 @method_decorator(csrf_exempt, name='dispatch')
 class PdfTextExtractView(FormView):
     form_class = forms.PDFFileUploadForm
@@ -57,7 +39,7 @@ class PdfEncryptView(FormView):
         tasks.pdf_encrypt.delay(services.full_path(
             file_obj.file.path),
             str(file_obj.id),
-            form.cleaned_data.get('old_password', ''),
+            form.cleaned_data.get('password', ''),
             form.cleaned_data.get('new_password')
         )
         return JsonResponse({'message': 'success', 'file_id': file_obj.id})
@@ -139,6 +121,7 @@ class PdfRotateView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = forms.PDFFileRotateForm(request.POST, request.FILES)
+        print(request.POST)
         if form.is_valid():
             file_obj = File.objects.create(file=form.cleaned_data['file'])
             tasks.pdf_rotate.delay(

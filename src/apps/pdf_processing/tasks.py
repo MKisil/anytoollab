@@ -23,7 +23,7 @@ from src.apps.pdf_processing.models import File
 def extract_text_from_pdf(file_path, file_id, password):
     doc = fitz.open(file_path)
 
-    if password and doc.needs_pass:
+    if password:
         doc.authenticate(password)
 
     output = []
@@ -136,6 +136,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
     doc.authenticate(password)
 
     if save_separate:
+        print(111111111111111)
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, 'w') as zip:
             for p in selected_pages:
@@ -161,6 +162,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         send_notification.delay({'content': file_obj.file.url}, file_id)
 
     else:
+        print(2222222222222)
         new_doc = fitz.open()
 
         for p in selected_pages:

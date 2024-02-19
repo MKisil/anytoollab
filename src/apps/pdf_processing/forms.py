@@ -93,7 +93,7 @@ class PDFFileDecryptForm(PDFFileUploadForm):
 
 class PDFFileSplitForm(PDFFileUploadForm):
     selected_pages = forms.CharField(max_length=1000)
-    save_separate = forms.BooleanField()
+    save_separate = forms.JSONField()
 
     def clean_selected_pages(self):
         selected_pages = self.cleaned_data['selected_pages']
@@ -106,7 +106,7 @@ class PDFFileSplitForm(PDFFileUploadForm):
     def clean_save_separate(self):
         save_separate = self.cleaned_data['save_separate']
 
-        if save_separate == 'on':
+        if save_separate:
             return True
         else:
             return False
@@ -114,7 +114,7 @@ class PDFFileSplitForm(PDFFileUploadForm):
 
 class PDFFileAddPageNumbersForm(PDFFileUploadForm):
     number_position = forms.CharField(max_length=10)
-    number_on_first_page = forms.BooleanField(required=False)
+    number_on_first_page = forms.JSONField()
 
     def clean_number_position(self):
         number_position = self.cleaned_data['number_position']
@@ -123,10 +123,18 @@ class PDFFileAddPageNumbersForm(PDFFileUploadForm):
             raise forms.ValidationError('Incorrect position value for page numbers.')
         return number_position
 
+    def clean_number_on_first_page(self):
+        number_on_first_page = self.cleaned_data['number_on_first_page']
+
+        if number_on_first_page:
+            return True
+        else:
+            return False
+
 
 class PDFFileRotateForm(PDFFileUploadForm):
     document_rotation = forms.DecimalField(min_value=-270, max_value=270)
-    pages_rotation = forms.JSONField()
+    pages_rotation = forms.JSONField(required=False)
 
     def clean_document_rotation(self):
         return int(self.cleaned_data['document_rotation'])
@@ -134,11 +142,12 @@ class PDFFileRotateForm(PDFFileUploadForm):
     def clean_pages_rotation(self):
         pages_rotation = self.cleaned_data['pages_rotation']
 
-        if not ''.join(pages_rotation.keys()).replace('-', '0').isdigit():
-            raise forms.ValidationError('Incorrect page numbers.')
+        if pages_rotation:
+            if not ''.join(pages_rotation.keys()).replace('-', '0').isdigit():
+                raise forms.ValidationError('Incorrect page numbers.')
 
-        if len([angl for angl in pages_rotation.values() if angl % 10 == 0]) != len(pages_rotation.values()):
-            raise forms.ValidationError('Incorrect rotating angles for pages.')
+            if len([angl for angl in pages_rotation.values() if angl % 10 == 0]) != len(pages_rotation.values()):
+                raise forms.ValidationError('Incorrect rotating angles for pages.')
 
         return pages_rotation
 
