@@ -45,9 +45,13 @@ class MultipleImageField(forms.FileField):
 
 class PDFFileUploadForm(forms.Form):
     file = forms.FileField()
+    password = forms.CharField(max_length=250, required=False)
 
-    def clean_file(self):
+    def clean(self):
+        super(PDFFileUploadForm, self).clean()
+
         file = self.cleaned_data['file']
+        password = self.cleaned_data['password']
 
         max_size = 1024 * 1024 * 1024
         if file.size > max_size:
@@ -56,29 +60,9 @@ class PDFFileUploadForm(forms.Form):
         try:
             reader = PdfReader(file)
             reader.pages
-        except PdfReadError:
-            raise forms.ValidationError('Incorrect pdf file.')
-        else:
-            return file
 
-
-class PDFFileEncryptForm(PDFFileUploadForm):
-    old_password = forms.CharField(max_length=250, required=False)
-    new_password = forms.CharField(max_length=30,
-                                   help_text='The password can contain Latin letters, numbers and !@#$%^&*()')
-
-    def clean(self):
-        super(PDFFileEncryptForm, self).clean()
-
-        file = self.cleaned_data['file']
-        old_password = self.cleaned_data['old_password']
-
-        try:
-            reader = PdfReader(file)
-            reader.pages
-
-            if old_password:
-                if not reader.decrypt(old_password):
+            if password:
+                if not reader.decrypt(password):
                     raise forms.ValidationError('Invalid old password.')
 
         except PdfReadError:
@@ -86,8 +70,10 @@ class PDFFileEncryptForm(PDFFileUploadForm):
 
         return self.cleaned_data
 
-    def clean_file(self):
-        return self.cleaned_data['file']
+
+class PDFFileEncryptForm(PDFFileUploadForm):
+    new_password = forms.CharField(max_length=30,
+                                   help_text='The password can contain Latin letters, numbers and !@#$%^&*()')
 
     def clean_new_password(self):
         password = self.cleaned_data['new_password']
@@ -102,41 +88,12 @@ class PDFFileEncryptForm(PDFFileUploadForm):
 
 
 class PDFFileDecryptForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=250)
-
-    def clean(self):
-        super(PDFFileDecryptForm, self).clean()
-
-        file = self.cleaned_data['file']
-        password = self.cleaned_data['password']
-
-        try:
-            reader = PdfReader(file)
-            if not reader.is_encrypted:
-                raise forms.ValidationError('The PDF file is not encrypted.')
-
-            decrypted = reader.decrypt(password)
-            if not decrypted:
-                raise forms.ValidationError('Invalid password.')
-            else:
-                reader.pages
-
-        except PdfReadError:
-            raise forms.ValidationError('Invalid pdf file.')
-
-        return self.cleaned_data
-
-    def clean_file(self):
-        return self.cleaned_data['file']
+    password = forms.CharField(max_length=250, required=True)
 
 
 class PDFFileSplitForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=200, required=False)
     selected_pages = forms.CharField(max_length=1000)
     save_separate = forms.BooleanField()
-
-    def clean_password(self):
-        return self.cleaned_data['password']
 
     def clean_selected_pages(self):
         selected_pages = self.cleaned_data['selected_pages']
@@ -156,7 +113,6 @@ class PDFFileSplitForm(PDFFileUploadForm):
 
 
 class PDFFileAddPageNumbersForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=200, required=False)
     number_position = forms.CharField(max_length=10)
     number_on_first_page = forms.BooleanField(required=False)
 
@@ -169,7 +125,6 @@ class PDFFileAddPageNumbersForm(PDFFileUploadForm):
 
 
 class PDFFileRotateForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=200, required=False)
     document_rotation = forms.DecimalField(min_value=-270, max_value=270)
     pages_rotation = forms.JSONField()
 
@@ -223,7 +178,6 @@ class ImgToPDFForm(forms.Form):
 
 
 class PDFDeletePagesForm(PDFFileUploadForm):
-    password = forms.CharField(max_length=200, required=False)
     selected_pages = forms.JSONField()
 
     def clean_selected_pages(self):
