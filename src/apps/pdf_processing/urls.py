@@ -6,6 +6,7 @@ app_name = 'pdf'
 
 urlpatterns = [
     # path('test/', views.TestView.as_view(), name='test'),
+    path('editor/', views.PdfEditorView.as_view(), name='editor'),
     path('rotate/', views.PdfRotateView.as_view(), name='rotate'),
     path('split/', views.PdfSplitView.as_view(), name='split'),
     path('encrypt/', views.PdfEncryptView.as_view(), name='encrypt'),

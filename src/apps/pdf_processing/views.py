@@ -185,6 +185,10 @@ class PdfDeletePagesView(TemplateView):
             return JsonResponse({'message': 'error'})
 
 
+class PdfEditorView(TemplateView):
+    template_name = 'pdf_processing/pdf_editor.html'
+
+
 class TestView(FormView):
     form_class = forms.TestForm
     template_name = 'pdf_processing/test.html'
