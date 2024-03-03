@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header_bottom %}
+    <div class="intro">
+        <div class="container">
+            <div class="intro-inner">
+                <div>
+                    <h2 class="intro-title">Web tools by AnyToolLab:)</h2>
+                    <p class="intro-description">Find the exact tool you need!</p>
+                </div>
+                <div class="slogan-wrapper">
+                    <h3 class="slogan">Taking care of You</h3>
+                    <div class="slogan-img"></div>
+                </div>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+{% endblock header_bottom %}
+{% block content %}
+    <section class="tools-section">
+        <h2 class="hidden">Tools</h2>
+        <section class="tool_type-section">
+            <div class="container">
+                <div class="tool_type-section-inner">
+                    <h2 class="tool_type-section-title">
+                        PDF Tools
+                    </h2>
+                    <div class="tool_type-tools">
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:editor' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_edit.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">Edit<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:split' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_split.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">Split<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:encrypt' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_protect.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">Protect<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:decrypt' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_unlock.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">Unlock<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:add_page_numbers' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_page_number.png' %}" alt="Tool icon"
+                                         class="ttt-img">
+                                    <h3 class="ttt-title">Add page numbers<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:text_extract' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_extract_text.png' %}" alt="Tool icon"
+                                         class="ttt-img">
+                                    <h3 class="ttt-title">Extract text<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:delete_pages' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_delete_pages.png' %}" alt="Tool icon"
+                                         class="ttt-img">
+                                    <h3 class="ttt-title">Delete pages<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:img_to_pdf' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/img2pdf.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">PNG to PDF</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:img_to_pdf' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/img2pdf.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">JPG to PDF</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="tool_type-tool">
+                            <a href="{% url 'pdf:rotate' %}" class="ttt-link">
+                                <div class="tool_type-tool-inner">
+                                    <img src="{% static 'images/pdf_rotate.png' %}" alt="Tool icon" class="ttt-img">
+                                    <h3 class="ttt-title">Rotate<span class="hidden">pdf</span></h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+{% endblock content %}

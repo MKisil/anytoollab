@@ -5,7 +5,6 @@ body {
 
 .file_edit {
     display: flex;
-    min-height: 100vh;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -87,11 +86,12 @@ body {
 }
 
 .submit {
+    color: white;
     margin-top: 20px;
     width: fit-content;
     padding: 15px 25px;
     border-radius: 3px;
-    background-color: #92aec3;
+    background-color: #75a0b3;
     font-weight: 700;
     font-size: 18px;
     letter-spacing: 1.5px;
@@ -100,20 +100,20 @@ body {
 .loader {
     width: 15px;
     aspect-ratio: 1;
-    background: #5eaaf7;
+    background: #3b393f;
     border-radius: 50%;
     animation: l6 1s infinite linear alternate;
 }
 
 @keyframes l6 {
     0% {
-        box-shadow: 15px 0 0 0 #5eaaf7, -25px 0 0 0 #5eaaf7;
+        box-shadow: 15px 0 0 0 #3b393f, -25px 0 0 0 #3b393f;
     }
     50% {
-        box-shadow: 15px 0 0 0 #5eaaf7, -15px 0 0 0 #5eaaf7;
+        box-shadow: 15px 0 0 0 #3b393f, -15px 0 0 0 #3b393f;
     }
     100% {
-        box-shadow: 25px 0 0 0 #5eaaf7, -15px 0 0 0 #5eaaf7;
+        box-shadow: 25px 0 0 0 #3b393f, -15px 0 0 0 #3b393f;
     }
 }
 
@@ -126,7 +126,7 @@ body {
 .download_title {
     font-size: 24px;
     margin-bottom: 17px;
-    color: #382f4f;
+    color: #5d5c64;
 }
 
 .download_link {
@@ -169,6 +169,24 @@ body {
 
 .hidden {
     display: none;
+}
+
+.custom_popup-swal2 {
+    background-color: #e4f7ff;
+    border: 2px solid #76777c;
+    border-radius: 6px;
+}
+
+.custom_container-swal2 {
+    background: rgba(0, 0, 0, .1) !important;
+}
+
+.custom_confirmbutton-swal2 {
+    background-color: #6f94e4 !important;
+}
+
+.custom_confirmbutton-swal2:focus {
+    box-shadow: 0 0 0 3px rgba(111, 148, 228, 0.5) !important;
 }
 
 

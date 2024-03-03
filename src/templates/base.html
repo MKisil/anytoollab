@@ -1,69 +1,221 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Source+Code+Pro&family=Poppins&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Anta&family=Roboto:wght@400;500;700&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/custom_bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     {% block head %}
     {% endblock head %}
-    <title>Document</title>
 </head>
-<body>
+<body id="body">
 <header class="header">
-    <div class="header__container">
-        <nav class="nav">
-            <a class="logo" href="{% url 'home' %}">
-					<span class="logo__name">
-						pyMystery
-					</span>
-                <img src="{% static 'images/logo_icon.png' %}" alt="Логотип">
-            </a>
-            <ul class="nav__menu">
-                <li class="nav__menu-item"><a href="">Інструменти</a></li>
-                <li class="nav__menu-item"><a href="">Підтримка</a></li>
-                <li class="nav__menu-item"><a href="">Контакти</a></li>
-                <li class="nav__menu-item"><a href="#about">Про нас</a></li>
-            </ul>
-            <a href="#" class="login_logout-link">Увійти</a>
-        </nav>
-        {% block header %}
-        {% endblock header %}
+    <div class="header_inner-top">
+        <div class="container">
+            <div class="head_inner">
+                <div class="logo_wrapper">
+                    <a href="{% url 'home' %}" class="logo_link">
+                        <img src="{% static 'images/logo.svg' %}" alt="" class="logo">
+                    </a>
+                </div>
+                <div class="nav_wrapper">
+                    <nav class="nav">
+                        <ul class="tools">
+                            <li class="tool_category">
+                                <a href="#" class="tool_category-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                         width="24">
+                                        <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/>
+                                    </svg>
+                                    PDF Tools
+                                    <svg class="expand_more" xmlns="http://www.w3.org/2000/svg" height="18"
+                                         viewBox="0 -960 960 960" width="18">
+                                        <path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/>
+                                    </svg>
+                                </a>
+                                <ul class="tool_list">
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:editor' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                                            </svg>
+                                            Edit
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:split' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M200-520q-33 0-56.5-23.5T120-600v-160q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v160q0 33-23.5 56.5T760-520H200Zm0-80h560v-160H200v160Zm0 480q-33 0-56.5-23.5T120-200v-160q0-33 23.5-56.5T200-440h560q33 0 56.5 23.5T840-360v160q0 33-23.5 56.5T760-120H200Zm0-80h560v-160H200v160Zm0-400v-160 160Zm0 400v-160 160Z"/>
+                                            </svg>
+                                            Split
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:encrypt' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
+                                            </svg>
+                                            Protect
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:decrypt' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M240-640h360v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85h-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640Zm0 480h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z"/>
+                                            </svg>
+                                            Unlock
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:add_page_numbers' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M220-360v-180h-60v-60h120v240h-60Zm140 0v-100q0-17 11.5-28.5T400-500h80v-40H360v-60h140q17 0 28.5 11.5T540-560v60q0 17-11.5 28.5T500-460h-80v40h120v60H360Zm240 0v-60h120v-40h-80v-40h80v-40H600v-60h140q17 0 28.5 11.5T780-560v160q0 17-11.5 28.5T740-360H600Z"/>
+                                            </svg>
+                                            Add page numbers
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:rotate' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M440-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T80-440q0-150 105-255t255-105h6l-62-62 56-58 160 160-160 160-56-58 62-62h-6q-117 0-198.5 81.5T160-440q0 117 81.5 198.5T440-160q35 0 69-8.5t65-25.5l58 58q-43 28-92 42T440-80Zm240-120L440-440l240-240 240 240-240 240Zm0-114 126-126-126-126-126 126 126 126Zm0-126Z"/>
+                                            </svg>
+                                            Rotate
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="{% url 'pdf:delete_pages' %}" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                            </svg>
+                                            Delete Pages
+                                        </a>
+                                    </li>
+                                    <li class="tool">
+                                        <a href="#" class="tool-link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                 width="24">
+                                                <path d="M200-160v-480h447L503-783l57-57 240 240-241 241-56-57 144-144H280v400h-80Z"/>
+                                            </svg>
+                                            Convert to PDF
+                                            <svg class="chevron_right" xmlns="http://www.w3.org/2000/svg" height="30"
+                                                 viewBox="0 -960 960 960" width="30">
+                                                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+                                            </svg>
+                                        </a>
+                                        <ul class="tool_sub">
+                                            <li class="tool">
+                                                <a href="{% url 'pdf:img_to_pdf' %}" class="tool-link">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24"
+                                                         viewBox="0 -960 960 960" width="24">
+                                                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"/>
+                                                    </svg>
+                                                    PNG to PDF
+                                                </a>
+                                            </li>
+                                            <li class="tool">
+                                                <a href="{% url 'pdf:img_to_pdf' %}" class="tool-link">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24"
+                                                         viewBox="0 -960 960 960" width="24">
+                                                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"/>
+                                                    </svg>
+                                                    JPG to PDF
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="account">
+                    <button class="login">Log In</button>
+                </div>
+            </div>
+        </div>
     </div>
+    {% block header_bottom %}
+    {% endblock header_bottom %}
 </header>
 <main class="main">
     {% block content %}
     {% endblock content %}
 </main>
 <footer class="footer">
-    <div class="footer__container">
-        <nav class="nav footer__nav">
-            <a class="logo" href="{% url 'home' %}">
-					<span class="logo__name">
-						pyMystery
-					</span>
-                <img src="{% static 'images/logo_icon.png' %}" alt="Логотип">
-            </a>
-            <ul class="nav__menu">
-                <li class="nav__menu-item"><a href="">Підтримка</a></li>
-                <li class="nav__menu-item"><a href="">Контакти</a></li>
-                <li class="nav__menu-item"><a href="">Ціни</a></li>
-            </ul>
-            <a href="#" class="language">
-                <img src="{% static 'images/language_icon.png' %}" alt="Іконка перекладу" class="language__img">
-            </a>
-        </nav>
+    <div class="container">
+        <div class="footer_inner">
+            <div class="copyright"><span class="copyright-s">&#169;</span>anytoollab</div>
+            <nav class="nav">
+                <a href="" class="nav-f-link">
+                    Privacy
+                </a>
+                <a href="" class="nav-f-link" id="contact-us-link">
+                    Contact Us
+                </a>
+                <a href="" class="nav-f-link">
+                    About
+                </a>
+            </nav>
+            <div class="language">
+                <button class="language-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="language-img" height="24" viewBox="0 -960 960 960"
+                         width="24">
+                        <path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q83 0 155.5 31.5t127 86q54.5 54.5 86 127T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Zm0-82q26-36 45-75t31-83H404q12 44 31 83t45 75Zm-104-16q-18-33-31.5-68.5T322-320H204q29 50 72.5 87t99.5 55Zm208 0q56-18 99.5-55t72.5-87H638q-9 38-22.5 73.5T584-178ZM170-400h136q-3-20-4.5-39.5T300-480q0-21 1.5-40.5T306-560H170q-5 20-7.5 39.5T160-480q0 21 2.5 40.5T170-400Zm216 0h188q3-20 4.5-39.5T580-480q0-21-1.5-40.5T574-560H386q-3 20-4.5 39.5T380-480q0 21 1.5 40.5T386-400Zm268 0h136q5-20 7.5-39.5T800-480q0-21-2.5-40.5T790-560H654q3 20 4.5 39.5T660-480q0 21-1.5 40.5T654-400Zm-16-240h118q-29-50-72.5-87T584-782q18 33 31.5 68.5T638-640Zm-234 0h152q-12-44-31-83t-45-75q-26 36-45 75t-31 83Zm-200 0h118q9-38 22.5-73.5T376-782q-56 18-99.5 55T204-640Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="popups" id="popups">
+        <div class="popup-open" id="popup-open"></div>
+        <div class="popup popup-info" id="popup-info">
+            <div class="popup-container">
+                <div class="popup-inner popup-info-inner">
+                    <svg class="popup-close" id="popup-close-info" fill="#3b393f" xmlns="http://www.w3.org/2000/svg"
+                         height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                    </svg>
+                    <h2 class="popup-title">Thank You!</h2>
+                    <p class="popup-desc">Your message has been sent.</p>
+                    <button class="popup-done-info" id="popup-done-info">Ok</button>
+                </div>
+            </div>
+        </div>
+        <div class="popup popup-contact" id="popup-contact">
+            <div class="popup-container">
+                <div class="popup-inner popup-contact-inner">
+                    <svg class="popup-close" id="popup-close-contact" fill="#3b393f" xmlns="http://www.w3.org/2000/svg"
+                         height="24" viewBox="0 -960 960 960" width="24">
+                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                    </svg>
+                    <h2 class="popup-title">Contact Us</h2>
+                    <p class="popup-desc">Write to us to contact us, suggest a new feature, or report a bug. Thank
+                        You!</p>
+                    <div class="form-fields">
+                        <textarea class="contact-message" id="contact-message" required placeholder="Write message..."
+                                  rows="6"></textarea>
+                        <input class="contact-email" id="contact-email" type="email" required
+                               placeholder="youremail@gmail.com">
+                        <button class="contact-send" id="contact-send">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>
+<script src="{% static 'js/index.js' %}"></script>
 </body>
-{% block js %}
-{% endblock js %}
 </html>

@@ -1,15 +1,33 @@
-<!doctype html>
+{% extends '../base.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title></title>
+{% block head %}
     <script defer="defer" src="{% static 'js/pdf_processing/pdf_rotate.js' %}"></script>
     <link href="{% static 'css/pdf_processing/pdf_rotate.css' %}" rel="stylesheet">
-</head>
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-</body>
-</html>
+{% endblock head %}
+{% block header_bottom %}
+    <div class="intro action">
+        <div class="container">
+            <div class="intro-inner action">
+                <div>
+                    <h2 class="intro-title action">Rotate pdf file/pages.</h2>
+                    <p class="intro-description action">Rotate your pdf file or its individual pages as you need.</p>
+                </div>
+                <span class="line action"></span>
+            </div>
+        </div>
+    </div>
+{% endblock header_bottom %}
+{% block content %}
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <section class="tools-section">
+        <h2 class="hidden">Tools</h2>
+        <section class="tool_type-section">
+        <h2 class="hidden">Tool</h2>
+            <div class="container">
+                <div class="tool_type-section-inner action">
+                    <div id="root"></div>
+                </div>
+            </div>
+        </section>
+    </section>
+{% endblock content %}
