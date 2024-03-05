@@ -23,7 +23,7 @@ from config.settings import base
 urlpatterns = [
     path('', include('src.apps.main.urls')),
     path('pdf-processing/', include('src.apps.pdf_processing.urls', namespace='pdf')),
-    path('image-processing/', include('src.apps.image_processing.urls', namespace='image')),
+    # path('image-processing/', include('src.apps.image_processing.urls', namespace='image')),
     path('admin/', admin.site.urls),
 ]
 

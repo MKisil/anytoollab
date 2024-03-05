@@ -1,6 +1,4 @@
-from django.http import JsonResponse, FileResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, TemplateView

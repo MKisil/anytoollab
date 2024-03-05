@@ -14,7 +14,7 @@ from pypdf import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 
 from config.celery import app
-from src.apps.notifications.tasks import send_notification
+from src.apps.notifications.tasks import pdf_processed_send_notification
 from src.apps.pdf_processing import services
 from src.apps.pdf_processing.models import File
 
@@ -47,7 +47,7 @@ def extract_text_from_pdf(file_path, file_id, password):
     file_obj = File()
     file_obj.file.save(f'result_{file_id}.txt', ContentFile(result_text))
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -72,7 +72,7 @@ def pdf_encrypt(file_path, file_id, password, new_password):
     output.close()
     writer.close()
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -94,7 +94,7 @@ def pdf_decrypt(file_path, file_id, password):
     output.close()
     writer.close()
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -125,7 +125,7 @@ def pdf_compress(file_path, file_id):
     output.close()
     writer.close()
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -159,10 +159,9 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
 
         zip_buffer.close()
 
-        send_notification.delay({'content': file_obj.file.url}, file_id)
+        pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
     else:
-        print(2222222222222)
         new_doc = fitz.open()
 
         for p in selected_pages:
@@ -178,7 +177,7 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
         new_doc.close()
         output.close()
 
-        send_notification.delay({'content': file_obj.file.url}, file_id)
+        pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -235,7 +234,7 @@ def pdf_addpagenumbers(file_path, file_id, password='', number_on_first_page=Fal
                         bytes_stream.seek(0)
                         file_obj.file.save(f'result_{file_id}.pdf', ContentFile(bytes_stream.getvalue()))
 
-                    send_notification.delay({'content': file_obj.file.url}, file_id)
+                    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
             os.remove(tmp)
             writer.close()
@@ -267,7 +266,7 @@ def pdf_rotate(file_path, file_id, pages_rotation, document_rotation=0, password
 
     writer.close()
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -295,7 +294,7 @@ def img_to_pdf(files_path, file_id, images_rotation, orientation='Auto orientati
     else:
         file_obj.file.save(f'result_{file_id}.pdf', ContentFile(img2pdf.convert(image_bytes_list)))
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)
 
 
 @app.task
@@ -319,4 +318,4 @@ def pdf_delete_pages(file_path, file_id, pages_to_delete, password=''):
 
     writer.close()
 
-    send_notification.delay({'content': file_obj.file.url}, file_id)
+    pdf_processed_send_notification.delay({'content': file_obj.file.url}, file_id)

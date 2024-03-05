@@ -5,5 +5,5 @@ from src.apps.image_processing import views
 app_name = 'image'
 
 urlpatterns = [
-    path('', views.ImageProcessingView.as_view(), name='image_processing'),
+    # path('', views.ImageProcessingView.as_view(), name='image_processing'),
 ]

@@ -1,0 +1,10 @@
+Django==4.2.7
+psycopg==3.1.13
+celery[redis]==5.3.6
+django-celery-beat==2.5.0
+redis==5.0.1
+python-dotenv==1.0.0
+daphne==4.0.0
+channels-redis==4.1.0
+channels==4.0.0
+django-cleanup==8.0.0
