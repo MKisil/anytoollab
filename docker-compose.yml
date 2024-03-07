@@ -43,14 +43,12 @@ services:
     restart: always
 
   celery_worker:
-    build:
-      context: .
+    build: .
     volumes:
       - media:/usr/src/app/media
-    entrypoint: [ 'celery' ]
-    command: [ '--workdir=/usr/src/app', '-A', 'config', 'worker', '-l', 'INFO' ]
     env_file:
       - .env_dev
+    entrypoint: [ './entrypoint_celery.sh' ]
     depends_on:
       database:
         condition: service_healthy
@@ -59,11 +57,10 @@ services:
     restart: always
 
   celery_beats:
-    build:
-      context: .
-    entrypoint: ['sh', './entrypoint_celery_beats.sh']
+    build: .
     env_file:
       - .env_dev
+    entrypoint: [ './entrypoint_celery_beats.sh' ]
     depends_on:
       database:
         condition: service_healthy

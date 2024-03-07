@@ -13,7 +13,15 @@ RUN apk add --no-cache \
 
 RUN apk add postgresql-client build-base postgresql-dev
 
-COPY . .
+COPY ./config ./config
+COPY ./requirements ./requirements
+COPY ./src ./src
+COPY ./.env .
+COPY ./.env_dev .
+COPY ./entrypoint.sh .
+COPY ./entrypoint_celery.sh .
+COPY ./entrypoint_celery_beats.sh .
+COPY ./manage.py .
 
 RUN pip install -r ./requirements/production.txt
 
