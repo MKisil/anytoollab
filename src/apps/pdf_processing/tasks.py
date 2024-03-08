@@ -136,7 +136,6 @@ def pdf_split(file_path, file_id, selected_pages, save_separate=False, password=
     doc.authenticate(password)
 
     if save_separate:
-        print(111111111111111)
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, 'w') as zip:
             for p in selected_pages:
@@ -278,7 +277,7 @@ def img_to_pdf(files_path, file_id, images_rotation, orientation='Auto orientati
     image_bytes_list = []
     for i, file_path in enumerate(files_path):
         with Image.open(file_path) as img:
-            img_rotated = img.rotate(images_rotation[i], expand=True)
+            img_rotated = img.rotate(images_rotation[i] * -1, expand=True)
             img_byte_array = io.BytesIO()
             img_rotated.save(img_byte_array, format=img.format)
             img_byte_array.seek(0)
