@@ -17,7 +17,7 @@ from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv(filename='.env_dev'))
-load_dotenv(find_dotenv(filename='.env'))
+load_dotenv(find_dotenv(filename='.env'), override=True)
 
 
 def get_env_variable(var_name):
@@ -34,12 +34,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -102,7 +96,7 @@ DATABASES = {
         'USER': get_env_variable('DB_USER'),
         'PASSWORD': get_env_variable('DB_PASSWORD'),
         'HOST': get_env_variable('DB_HOST'),
-        'PORT': 5432,
+        'PORT': get_env_variable('DB_PORT'),
     }
 }
 
@@ -127,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'uk'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
@@ -152,33 +146,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# STORAGES = {
-#     "staticfiles": {
-#         "BACKEND": "storages.backends.s3.S3Storage",
-#         "OPTIONS": {
-#             'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
-#             'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
-#             'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
-#             'region_name': get_env_variable('AWS_S3_REGION_NAME'),
-#             'location': get_env_variable('AWS_LOCATION'),
-#         },
-#     },
-#     "default": {
-#         "BACKEND": "storages.backends.s3.S3Storage",
-#         "OPTIONS": {
-#             'access_key': get_env_variable('AWS_ACCESS_KEY_ID'),
-#             'secret_key': get_env_variable('AWS_SECRET_ACCESS_KEY'),
-#             'bucket_name': get_env_variable('AWS_STORAGE_BUCKET_NAME'),
-#             'region_name': get_env_variable('AWS_S3_REGION_NAME'),
-#             'file_overwrite': False,
-#         },
-#     },
-# }
+REDIS_HOST = get_env_variable('REDIS_HOST')
+REDIS_PORT = get_env_variable('REDIS_PORT')
 
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
-
-CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BROKER_CONNECTION_RETRY = True
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 

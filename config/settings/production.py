@@ -4,6 +4,8 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 
 DEBUG = get_env_variable('DEBUG') == 'True'
 
+ALLOWED_HOSTS = ["127.0.0.1", get_env_variable('SERVER_IP'), get_env_variable('SERVER_NAME')]
+
 # if not DEBUG:
 #     STORAGES = {
 #         "staticfiles": {
