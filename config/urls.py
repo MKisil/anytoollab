@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from config.settings import base
+from config.settings import production
 
 urlpatterns = [
     path('', include('src.apps.main.urls')),
@@ -27,6 +27,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-if base.DEBUG:
-    urlpatterns += static(base.MEDIA_URL, document_root=base.MEDIA_ROOT)
+if production.DEBUG:
+    urlpatterns += static(production.MEDIA_URL, document_root=production.MEDIA_ROOT)
 
