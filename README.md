@@ -13,7 +13,7 @@ docker compose up
 After setup, visit [127.0.0.1](http://127.0.0.1) in your browser.
 
 ## About This Project
-This is a website that is a collection of various web tools.
+This is a website that is a collection of various useful web tools.
 
 ## Tools
 The following tools are currently available on the site[^1]:
