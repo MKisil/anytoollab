@@ -3,5 +3,6 @@
 *.pot
 *.pyc
 __pycache__
-src/media
+media
+static
 .env
