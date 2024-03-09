@@ -252,8 +252,9 @@ def pdf_rotate(file_path, file_id, pages_rotation, document_rotation=0, password
 
     for page_number in range(len(reader.pages)):
         page = reader.pages[page_number]
+        current_rotation = page.get('/Rotate') if page.get('/Rotate') is not None else 0
         page.rotate(
-            pages_rotation.get(str(page_number + 1), document_rotation)
+            (pages_rotation.get(str(page_number + 1), document_rotation) - current_rotation) % 360
         )
         writer.add_page(page)
 
