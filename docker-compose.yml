@@ -8,7 +8,7 @@ services:
       - media:/usr/src/app/media
     env_file:
       - .env_dev
-      - .env
+#      - .env
     ports:
       - '$HTTP_PORT:8000'
       - '$WS_PORT:8001'
@@ -29,7 +29,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     env_file:
       - .env_dev
-      - .env
+ #     - .env
     ports:
       - '$DB_PORT:5432'
     healthcheck:
@@ -43,7 +43,7 @@ services:
     image: redis:7.2.3-alpine3.18
     env_file:
       - .env_dev
-      - .env
+   #   - .env
     ports:
       - '$REDIS_PORT:6379'
     restart: always
@@ -55,7 +55,7 @@ services:
       - media:/usr/src/app/media
     env_file:
       - .env_dev
-      - .env
+   #   - .env
     entrypoint: [ './entrypoint_celery.sh' ]
     depends_on:
       database:
@@ -68,7 +68,7 @@ services:
     build: .
     env_file:
       - .env_dev
-      - .env
+   #   - .env
     entrypoint: [ './entrypoint_celery_beats.sh' ]
     depends_on:
       database:
@@ -83,7 +83,7 @@ services:
     build: ./nginx
     env_file:
       - .env_dev
-      - .env
+   #   - .env
     volumes:
       - static:/static
       - media:/media
